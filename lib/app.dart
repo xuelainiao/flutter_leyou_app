@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/theme.dart';
@@ -31,7 +32,7 @@ class _MyappState extends State<MyApp> {
               : '/privacyStatement',
           showPerformanceOverlay: false,
           theme: AppTheme.originTheme,
-          // builder: EasyLoading.init(),
+          builder: EasyLoading.init(),
           defaultTransition: Transition.rightToLeft,
           // // 国际化支持 目前只有中文
           // localizationsDelegates: GlobalMaterialLocalizations.delegates,

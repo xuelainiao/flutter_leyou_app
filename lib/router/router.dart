@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/pages/home/homePage.dart';
+import 'package:mall_community/pages/login/login.dart';
 import 'package:mall_community/pages/privacyStatement/privacyStatement.dart';
 
 class AppPages {
   static final List<GetPage> pages = [
     /// 首页
-    GetPage(name: '/home', page: () => const HomePage()),
+    GetPage(name: '/home', page: () => HomePage()),
+    GetPage(name: '/login', page: () => LoginPage()),
 
     /// 地图
     // GetPage(name: '/map', page: () => ShowMapPage()),

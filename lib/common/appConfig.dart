@@ -3,8 +3,8 @@ import 'package:mall_community/utils/utils.dart';
 class AppConfig {
   /// 请求地址
   static String baseUrl = isProduction()
-      ? 'https://psj.junwangfei.cn/index.php'
-      : 'https://psjdev.t1.junwangfei.cn/index.php';
+      ? 'http://192.168.163.111:3000'
+      : 'http://192.168.163.111:3000';
 
   /// Go服务器 api
   static String goBaseUrl = isProduction()

@@ -1,10 +1,7 @@
 import 'package:dio/dio.dart' as dio;
-import 'package:flutter/material.dart';
-import 'package:mall_community/common/commStyle.dart';
 // import 'package:mall_community/components/Confirmation/Confirmation.dart';
-import 'package:mall_community/common/appConfig.dart';
 import 'package:mall_community/utils/request/Response.dart';
-import 'package:get/get.dart';
+import 'package:mall_community/utils/toast/toast.dart';
 import 'config.dart';
 
 class LoggingInterceptor extends dio.InterceptorsWrapper {
@@ -47,9 +44,6 @@ class LoggingInterceptor extends dio.InterceptorsWrapper {
         //   ));
         // }
         break;
-      case -1:
-        // ToastUtils.showToast(apiResponse.msg);
-        break;
       case -5:
         // Get.dialog(ConfirmationDialog(
         //   title: '下线提醒',
@@ -62,7 +56,7 @@ class LoggingInterceptor extends dio.InterceptorsWrapper {
       default:
     }
     if (apiResponse.code != 1) {
-      // ToastUtils.showToast(msg);
+      ToastUtils.showToast(msg);
       throw dio.DioException(
         requestOptions: response.requestOptions,
         response: response,
