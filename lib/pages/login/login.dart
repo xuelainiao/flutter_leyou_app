@@ -1,6 +1,7 @@
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/api/login.dart';
 import 'package:mall_community/common/commStyle.dart';
@@ -27,12 +28,14 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: const IconThemeData(color: Colors.black),
         ),
         resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
         body: SizedBox(
           height: 1.sh,
           width: 1.sw,
@@ -46,47 +49,29 @@ class LoginPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text('Hello!',
+                            style: TextStyle(
+                              fontSize: 44.sp,
+                              color: c_333,
+                              fontWeight: FontWeight.bold,
+                            )),
                         Text(
-                          '账号密码登录',
-                          style: tx20.copyWith(color: c_333),
+                          '欢迎使用模板社区平台',
+                          style: tx12.copyWith(color: c_333),
+                        ),
+                        Text(
+                          "新用户直接输入默认注册登录",
+                          style: tx12.copyWith(color: c_333),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 30.h),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: c_f1f1f1),
-                            ),
-                          ),
-                          child: BrnTextBlockInputFormItem(
-                            label: 'username',
-                            hint: '请输入登录账号',
-                            title: '登录账号',
-                            minLines: 1,
-                            maxLines: 1,
-                            onChanged: (value) {
-                              form['username'] = value;
-                            },
+                          alignment: Alignment.bottomRight,
+                          child: SizedBox(
+                            width: 200.w,
+                            child: Image.asset(
+                                'lib/assets/image/login/header.png'),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: c_f1f1f1),
-                            ),
-                          ),
-                          child: BrnTextBlockInputFormItem(
-                            label: 'password',
-                            title: '密码',
-                            hint: '请输入密码',
-                            minLines: 1,
-                            maxLines: 1,
-                            onChanged: (value) {
-                              form['password'] = value;
-                            },
-                            // inputType: 'visiblePassword',
-                          ),
-                        ),
+                        buildForm(keyboardHeight),
                         GestureDetector(
                           onTap: login,
                           child: Container(
@@ -123,44 +108,120 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                              onPressed: () {}, child: const Text('新用户账号注册')),
-                        ),
                       ],
                     ),
                   ),
                 ),
               ),
               Positioned(
-                bottom: ScreenUtil().bottomBarHeight + 20.h,
-                child: Container(
-                  height: 44.h,
-                  padding: const EdgeInsets.only(right: 24, left: 5),
-                  decoration: BoxDecoration(
-                    color: c_f1f1f1,
-                    borderRadius: const BorderRadius.all(Radius.circular(82)),
-                  ),
-                  child: Row(
+                  bottom: ScreenUtil().bottomBarHeight + 20.h,
+                  child: Column(
                     children: [
-                      Image.asset(
-                        "lib/assets/image/login/wxicon.png",
-                        width: 38.r,
-                        height: 38.r,
+                      Container(
+                        height: 44.h,
+                        padding: const EdgeInsets.only(right: 24, left: 5),
+                        decoration: BoxDecoration(
+                          color: c_f1f1f1,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(82)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              "lib/assets/image/login/wxicon.png",
+                              width: 38.r,
+                              height: 38.r,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              '微信账号登录',
+                              style: tx14.copyWith(color: c_999),
+                            )
+                          ],
+                        ),
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        '微信账号登录',
-                        style: tx14.copyWith(color: c_999),
-                      )
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Text(
+                            '登录代表您已阅读并同意',
+                            style: tx12.copyWith(
+                              color: c_333,
+                            ),
+                          ),
+                          Text(
+                            '《用户协议》',
+                            style: tx12.copyWith(
+                              color: const Color.fromRGBO(249, 168, 38, 1),
+                            ),
+                          ),
+                          Text(
+                            '《隐私政策》',
+                            style: tx12.copyWith(
+                              color: const Color.fromRGBO(249, 168, 38, 1),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
-                  ),
-                ),
-              )
+                  ))
             ],
           ),
         ));
+  }
+
+  Widget buildForm(keyboardHeight) {
+    return Container(
+      width: 1.sw,
+      padding: const EdgeInsets.all(10),
+      margin: EdgeInsets.only(
+        bottom: keyboardHeight,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            spreadRadius: 0,
+            blurRadius: 30,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: c_f1f1f1),
+              ),
+            ),
+            child: BrnTextBlockInputFormItem(
+              label: 'username',
+              hint: '请输入登录账号',
+              title: '登录账号',
+              minLines: 1,
+              maxLines: 1,
+              onChanged: (value) {
+                form['username'] = value;
+              },
+            ),
+          ),
+          BrnTextBlockInputFormItem(
+            label: 'password',
+            title: '密码',
+            hint: '请输入密码',
+            minLines: 1,
+            maxLines: 1,
+            inputType: BrnInputType.pwd,
+            onChanged: (value) {
+              form['password'] = value;
+            },
+            // inputType: 'visiblePassword',
+          ),
+        ],
+      ),
+    );
   }
 }

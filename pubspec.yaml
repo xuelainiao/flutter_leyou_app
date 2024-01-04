@@ -42,6 +42,8 @@ dependencies:
   dio: ^5.4.0
   # 像素兼容
   flutter_screenutil: ^5.9.0
+  # 图标
+  font_awesome_flutter: ^10.6.0
   # toast 消息提示
   flutter_easyloading: ^3.0.5
   # 图像选择
