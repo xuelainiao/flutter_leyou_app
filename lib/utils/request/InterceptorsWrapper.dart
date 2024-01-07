@@ -70,7 +70,7 @@ class LoggingInterceptor extends dio.InterceptorsWrapper {
   @override
   void onError(dio.DioException err, dio.ErrorInterceptorHandler handler) {
     // 在请求发生错误时拦截并处理错误
-    // ToastUtils.showToast(err.message ?? '服务端错误 请稍后再试');
+    ToastUtils.showToast(err.message ?? '服务端错误 请稍后再试');
     super.onError(err, handler);
   }
 }

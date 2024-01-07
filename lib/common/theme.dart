@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mall_community/common/commStyle.dart';
 
 class AppTheme {
   /// 通用大小 标题栏icon
@@ -22,24 +23,28 @@ class AppTheme {
   );
 
   /// 橙色
-  static final originTheme = ThemeData(
+  static final primaryTheme = ThemeData(
     brightness: Brightness.light,
     visualDensity: VisualDensity.adaptivePlatformDensity,
+    primaryColor: primaryColor,
     appBarTheme: AppBarTheme(
-      color: const Color.fromRGBO(252, 107, 54, 1),
+      color: primaryNavColor,
       titleTextStyle: TextStyle(fontSize: 16.sp),
       shadowColor: Colors.transparent,
       iconTheme: appBarIconThem,
     ),
-    buttonTheme: const ButtonThemeData(
-      buttonColor: Color.fromRGBO(252, 107, 54, 1),
+    buttonTheme: ButtonThemeData(
+      buttonColor: primaryColor,
       textTheme: ButtonTextTheme.primary,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromRGBO(252, 107, 54, 1),
+        backgroundColor: primaryColor,
         foregroundColor: Colors.white,
       ),
+    ),
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(color: primaryTextC),
     ),
     bottomAppBarTheme: const BottomAppBarTheme(),
   );

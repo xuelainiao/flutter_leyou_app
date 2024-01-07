@@ -31,7 +31,7 @@ class _MyappState extends State<MyApp> {
               ? '/home'
               : '/privacyStatement',
           showPerformanceOverlay: false,
-          theme: AppTheme.originTheme,
+          theme: AppTheme.primaryTheme,
           builder: EasyLoading.init(),
           defaultTransition: Transition.rightToLeft,
           // // 国际化支持 目前只有中文

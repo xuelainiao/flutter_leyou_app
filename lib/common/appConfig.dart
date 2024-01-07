@@ -3,8 +3,8 @@ import 'package:mall_community/utils/utils.dart';
 class AppConfig {
   /// 请求地址
   static String baseUrl = isProduction()
-      ? 'http://192.168.163.111:3000'
-      : 'http://192.168.163.111:3000';
+      ? 'http://192.168.3.111:3000'
+      : 'http://192.168.3.111:3000';
 
   /// Go服务器 api
   static String goBaseUrl = isProduction()
@@ -15,6 +15,11 @@ class AppConfig {
   static String liveWss = isProduction()
       ? 'wss://live.gyl.junwangfei.cn/ws'
       : 'wss://live.gyl.junwangfei.cn/ws';
+
+  // /// socket 地址
+  // static String socketUrl = isProduction()
+  //     ? 'http://192.168.163.111:3000/socket'
+  //     : 'http://192.168.163.111:3000/socket';
 
   /// 请求超时时间
   static Duration timeout = const Duration(seconds: 10);
