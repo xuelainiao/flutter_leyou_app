@@ -73,6 +73,7 @@ class _NewWorkImgState extends State<NetWorkImg> {
         ? errWidget()
         : ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(widget.raduis)),
+            clipBehavior: Clip.none,
             child: SizedBox(
               width: widget.width,
               height: widget.height,
@@ -107,21 +108,27 @@ class _NewWorkImgState extends State<NetWorkImg> {
   }
 
   Widget loading() {
-    return Container(
-      width: widget.width,
-      height: widget.height,
-      color: Colors.white,
-      alignment: Alignment.center,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(widget.raduis),
+      child: Container(
+        width: widget.width,
+        height: widget.height,
+        color: Colors.white,
+        alignment: Alignment.center,
+      ),
     );
   }
 
   Widget errWidget() {
-    return Container(
-      width: widget.width,
-      height: widget.height,
-      color: Colors.grey.shade100,
-      alignment: Alignment.center,
-      child: const Icon(Icons.error_outline),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(widget.raduis),
+      child: Container(
+        width: widget.width,
+        height: widget.height,
+        color: Colors.grey.shade100,
+        alignment: Alignment.center,
+        child: const Icon(Icons.error_outline),
+      ),
     );
   }
 }

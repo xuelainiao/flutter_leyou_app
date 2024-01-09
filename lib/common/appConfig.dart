@@ -2,9 +2,8 @@ import 'package:mall_community/utils/utils.dart';
 
 class AppConfig {
   /// 请求地址
-  static String baseUrl = isProduction()
-      ? 'http://192.168.3.111:3000'
-      : 'http://192.168.3.111:3000';
+  static String baseUrl =
+      isProduction() ? 'http://192.168.3.111:3000' : 'http://localhost:3000';
 
   /// Go服务器 api
   static String goBaseUrl = isProduction()

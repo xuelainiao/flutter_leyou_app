@@ -78,7 +78,7 @@ class _HomeTabblePageState extends State<HomeTabblePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
+      extendBody: false,
       body: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           controller: tabController,

@@ -4,8 +4,13 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketManager {
   static final SocketManager _instance = SocketManager._internal();
+
   IO.Socket? _socket;
+
+  /// 连接地址
   String socketUrl = AppConfig.baseUrl;
+
+  /// 当前订阅消息事件
   List<String> subscribeList = [];
 
   factory SocketManager({required String userId}) {
@@ -23,7 +28,6 @@ class SocketManager {
       'transports': ['websocket'],
       'autoConnect': true,
     });
-    print('socket init $socketUrl/?userId=$userId');
     _socket?.onConnect(onConnect);
     _socket?.onDisconnect(onDisconnect);
     _socket?.onConnectError((err) => {print("socket connectError $err")});

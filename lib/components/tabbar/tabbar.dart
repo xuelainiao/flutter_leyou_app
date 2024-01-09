@@ -23,27 +23,13 @@ class TabBare extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 0.8.sw,
-      margin: EdgeInsets.only(
+      padding: EdgeInsets.only(
+        top: 4.h,
         left: 24.w,
         right: 24.w,
-        bottom: ScreenUtil().bottomBarHeight > 0 ? 20.h : 10.h,
+        bottom: ScreenUtil().bottomBarHeight,
       ),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(30)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade300,
-              offset: const Offset(0, 10),
-              blurRadius: 20,
-            )
-          ]),
-      height: 60.h,
-      padding: EdgeInsets.only(
-        left: 24.w,
-        right: 20.w,
-        top: 4.h,
-      ),
+      height: 54.h + ScreenUtil().bottomBarHeight,
       child: IconTheme(
         data: IconThemeData(
           color: Colors.grey.shade400,
