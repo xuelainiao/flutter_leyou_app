@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mall_community/app.dart';
-import 'package:mall_community/common/appConfig.dart';
-import 'package:mall_community/modules/userModule.dart';
+import 'package:mall_community/common/app_config.dart';
+import 'package:mall_community/modules/user_module.dart';
 import 'package:mall_community/utils/storage.dart';
 
 void main() async {

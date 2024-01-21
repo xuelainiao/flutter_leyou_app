@@ -16,13 +16,13 @@ class ToastUtils {
       ..indicatorType = EasyLoadingIndicatorType.fadingCircle
       ..loadingStyle = EasyLoadingStyle.dark;
 
-    EasyLoadingToastPosition _postion = EasyLoadingToastPosition.center;
+    EasyLoadingToastPosition postionPrivate = EasyLoadingToastPosition.center;
     switch (position) {
       case 'top':
-        _postion = EasyLoadingToastPosition.top;
+        postionPrivate = EasyLoadingToastPosition.top;
         break;
       case 'bottom':
-        _postion = EasyLoadingToastPosition.bottom;
+        postionPrivate = EasyLoadingToastPosition.bottom;
         break;
     }
 
@@ -45,7 +45,7 @@ class ToastUtils {
 
     switch (type) {
       case 'toast':
-        EasyLoading.showToast(message, toastPosition: _postion);
+        EasyLoading.showToast(message, toastPosition: postionPrivate);
         break;
       case 'error':
         EasyLoading.showError(message);

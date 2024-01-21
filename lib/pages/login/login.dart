@@ -1,25 +1,26 @@
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/api/login.dart';
-import 'package:mall_community/common/commStyle.dart';
+import 'package:mall_community/common/comm_style.dart';
+import 'package:mall_community/modules/user_module.dart';
 import 'package:mall_community/utils/storage.dart';
 import 'package:mall_community/utils/toast/toast.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
-
-  Map form = {'username': '', 'password': ''};
+  final Map form = {'userName': '', 'password': ''};
 
   login() async {
-    if (form['username'].isEmpty) {
+    if (form['userName'].isEmpty) {
       ToastUtils.showToast('请输入正确的账号密码');
       return;
     }
     ToastUtils.showLoad(message: '登录中...');
     var reuslt = await reqLogin(form);
+    UserInfo.token = reuslt.data['token'];
+    UserInfo.info = reuslt.data['user'];
     Storage().write('user_info', reuslt.data['user']);
     Storage().write('token', reuslt.data['token']);
     Get.back();
@@ -35,7 +36,7 @@ class LoginPage extends StatelessWidget {
           iconTheme: const IconThemeData(color: Colors.black),
         ),
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        // backgroundColor: HexThemColor(backgroundColor),
         body: SizedBox(
           height: 1.sh,
           width: 1.sw,
@@ -52,16 +53,16 @@ class LoginPage extends StatelessWidget {
                         Text('Hello!',
                             style: TextStyle(
                               fontSize: 44.sp,
-                              color: c_333,
+                              color: HexThemColor(c333),
                               fontWeight: FontWeight.bold,
                             )),
                         Text(
                           '欢迎使用模板社区平台',
-                          style: tx12.copyWith(color: c_333),
+                          style: tx12.copyWith(color: HexThemColor(c333)),
                         ),
                         Text(
                           "新用户直接输入默认注册登录",
-                          style: tx12.copyWith(color: c_333),
+                          style: tx12.copyWith(color: HexThemColor(c333)),
                         ),
                         Container(
                           alignment: Alignment.bottomRight,
@@ -79,30 +80,39 @@ class LoginPage extends StatelessWidget {
                             height: 44.h,
                             margin: const EdgeInsets.only(top: 44),
                             alignment: Alignment.center,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(44)),
+                                  const BorderRadius.all(Radius.circular(44)),
                               gradient: LinearGradient(
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                                 colors: [
-                                  Color.fromRGBO(255, 221, 25, 1),
-                                  Color.fromRGBO(252, 203, 34, 1),
+                                  HexThemColor(
+                                    const Color.fromRGBO(255, 221, 25, 1),
+                                    direction: -1,
+                                  ),
+                                  HexThemColor(
+                                    const Color.fromRGBO(252, 203, 34, 1),
+                                    direction: -1,
+                                  ),
                                 ],
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Color.fromRGBO(253, 206, 34, 0.5),
+                                  color: HexThemColor(
+                                    const Color.fromRGBO(253, 206, 34, 0.5),
+                                    direction: -1,
+                                  ),
                                   spreadRadius: 0,
                                   blurRadius: 20,
-                                  offset: Offset(0, 4),
+                                  offset: const Offset(0, 4),
                                 ),
                               ],
                             ),
                             child: Text(
                               "立即登录",
                               style: tx16.copyWith(
-                                color: c_333,
+                                color: c333,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -121,7 +131,7 @@ class LoginPage extends StatelessWidget {
                         height: 44.h,
                         padding: const EdgeInsets.only(right: 24, left: 5),
                         decoration: BoxDecoration(
-                          color: c_f1f1f1,
+                          color: HexThemColor(cF1f1f1, direction: -1),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(82)),
                         ),
@@ -135,7 +145,7 @@ class LoginPage extends StatelessWidget {
                             const SizedBox(width: 10),
                             Text(
                               '微信账号登录',
-                              style: tx14.copyWith(color: c_999),
+                              style: tx14.copyWith(color: c999),
                             )
                           ],
                         ),
@@ -146,19 +156,19 @@ class LoginPage extends StatelessWidget {
                           Text(
                             '登录代表您已阅读并同意',
                             style: tx12.copyWith(
-                              color: c_333,
+                              color: HexThemColor(c333),
                             ),
                           ),
                           Text(
                             '《用户协议》',
                             style: tx12.copyWith(
-                              color: const Color.fromRGBO(249, 168, 38, 1),
+                              color: HexThemColor(warningColor),
                             ),
                           ),
                           Text(
                             '《隐私政策》',
                             style: tx12.copyWith(
-                              color: const Color.fromRGBO(249, 168, 38, 1),
+                              color: HexThemColor(warningColor),
                             ),
                           ),
                         ],
@@ -182,7 +192,7 @@ class LoginPage extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade300,
+            color: HexThemColor(Colors.grey.shade300, direction: -20),
             spreadRadius: 0,
             blurRadius: 30,
             offset: const Offset(0, 4),
@@ -194,17 +204,17 @@ class LoginPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: c_f1f1f1),
+                bottom: BorderSide(color: cF1f1f1),
               ),
             ),
             child: BrnTextBlockInputFormItem(
-              label: 'username',
+              label: 'userName',
               hint: '请输入登录账号',
               title: '登录账号',
               minLines: 1,
               maxLines: 1,
               onChanged: (value) {
-                form['username'] = value;
+                form['userName'] = value;
               },
             ),
           ),

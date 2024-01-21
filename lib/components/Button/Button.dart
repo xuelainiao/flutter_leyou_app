@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Button extends StatelessWidget {
-  Button({
+  const Button({
     super.key,
-    required this.text,
+    this.text = '',
     required this.onPressed,
     this.radius = 0,
     this.color,
@@ -16,19 +16,19 @@ class Button extends StatelessWidget {
 
   final String text;
 
-  Function onPressed;
+  final Function onPressed;
 
-  double radius;
+  final double radius;
 
-  Color? color;
+  final Color? color;
 
-  Color? textColor;
+  final Color? textColor;
 
-  Icon? icon;
+  final Icon? icon;
 
-  double fontSize;
+  final double fontSize;
 
-  Color borderColor;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {

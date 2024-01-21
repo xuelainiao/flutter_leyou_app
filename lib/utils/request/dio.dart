@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart' as dio;
-import 'package:mall_community/common/appConfig.dart';
-import 'package:mall_community/utils/request/Response.dart';
+import 'package:mall_community/common/app_config.dart';
+import 'package:mall_community/components/not_data/not_data.dart';
+import 'package:mall_community/utils/request/dio_response.dart';
 import 'package:mall_community/utils/request/config.dart';
+import 'package:mall_community/utils/request/error_exception.dart';
+import 'package:mall_community/utils/toast/toast.dart';
 
-import 'InterceptorsWrapper.dart';
+import 'interceptors_wrapper.dart';
 
 class ApiClient {
   static ApiClient? _instance;
@@ -46,59 +49,42 @@ class ApiClient {
     ));
   }
 
-  Future<ApiResponse<T>> get<T>(
-    String url, {
-    Map<String, dynamic>? query,
+  ///网络请求
+  Future<ApiResponse<T>> request<T>({
+    required String url,
+    String method = 'get',
+    dynamic data,
+    dynamic query,
     String? baseUrl,
+    Map<String, dynamic>? headers,
+    dio.CancelToken? cancelToken,
+    bool isLoad = false,
   }) async {
     try {
+      if (isLoad) {
+        ToastUtils.showLoad();
+      }
       _dio.options.baseUrl = baseUrl ?? AppConfig.baseUrl;
-      final response = await _dio.get(url, queryParameters: query);
+      final response = await _dio.request(
+        url,
+        data: data,
+        queryParameters: query,
+        options: dio.Options(method: method),
+        cancelToken: cancelToken,
+      );
       return ApiResponse.fromJson(response.data);
+    } on dio.DioException catch (e) {
+      if (isLoad) {
+        ToastUtils.hideLoad();
+      }
+      throw e.error ??
+          ApiError(code: NetWorkDataStatus.notNetworkError, msg: "请求错误");
     } catch (e) {
-      throw e;
-    }
-  }
-
-  Future<ApiResponse<T>> post<T>(
-    String url, {
-    dynamic data,
-    String? baseUrl,
-  }) async {
-    try {
-      _dio.options.baseUrl = baseUrl ?? AppConfig.baseUrl;
-      final response = await _dio.post(url, data: data);
-      return ApiResponse.fromJson(response.data);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<ApiResponse<T>> put<T>(
-    String url, {
-    dynamic data,
-    String? baseUrl,
-  }) async {
-    try {
-      final response = await _dio.put(url, data: data);
-      _dio.options.baseUrl = baseUrl ?? AppConfig.baseUrl;
-      return ApiResponse.fromJson(response.data);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<ApiResponse<T>> delete<T>(
-    String url, {
-    dynamic data,
-    String? baseUrl,
-  }) async {
-    try {
-      _dio.options.baseUrl = baseUrl ?? AppConfig.baseUrl;
-      final response = await _dio.delete(url, data: data);
-      return ApiResponse.fromJson(response.data);
-    } catch (error) {
-      throw error;
+      if (isLoad) {
+        ToastUtils.hideLoad();
+      }
+      throw ApiError(
+          code: NetWorkDataStatus.notNetworkError, msg: e.toString());
     }
   }
 
@@ -118,8 +104,12 @@ class ApiClient {
       _dio.options.baseUrl = AppConfig.baseUrl;
       final response = await _dio.post(url, data: formData);
       return ApiResponse.fromJson(response.data);
-    } catch (error) {
-      throw error;
+    } on dio.DioException catch (e) {
+      throw e.error ??
+          ApiError(code: NetWorkDataStatus.notNetworkError, msg: "请求错误");
+    } catch (e) {
+      throw ApiError(
+          code: NetWorkDataStatus.notNetworkError, msg: e.toString());
     }
   }
 
@@ -132,8 +122,12 @@ class ApiClient {
             responseType: dio.ResponseType.bytes,
           ));
       return File(savePath);
-    } catch (error) {
-      throw error;
+    } on dio.DioException catch (e) {
+      throw e.error ??
+          ApiError(code: NetWorkDataStatus.notNetworkError, msg: "请求错误");
+    } catch (e) {
+      throw ApiError(
+          code: NetWorkDataStatus.notNetworkError, msg: e.toString());
     }
   }
 }

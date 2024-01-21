@@ -1,14 +1,11 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/theme.dart';
+import 'package:mall_community/components/easy_refresh_diy/easy_refresh_diy.dart';
 import 'package:mall_community/router/router.dart';
-
-import 'common/appConfig.dart';
+import 'common/app_config.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -23,20 +20,20 @@ class _MyappState extends State<MyApp> {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (BuildContext context, child) {
+        setEasyRefreshDeafult();
         return GetMaterialApp(
           // initialBinding: ActionInjector(),
           getPages: AppPages.pages,
-          title: '商店社区',
+          title: '乐悠云社',
           initialRoute: AppConfig.privacyStatementHasAgree
               ? '/home'
               : '/privacyStatement',
           showPerformanceOverlay: false,
           theme: AppTheme.primaryTheme,
+          themeMode: AppTheme.mode,
+          darkTheme: AppTheme.darkTheme,
           builder: EasyLoading.init(),
           defaultTransition: Transition.rightToLeft,
-          // // 国际化支持 目前只有中文
-          // localizationsDelegates: GlobalMaterialLocalizations.delegates,
-          // supportedLocales: Platform.isIOS ? ios : an,
           locale: const Locale('zh'),
         );
       },

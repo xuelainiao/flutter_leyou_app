@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
-import 'package:mall_community/common/commStyle.dart';
+import 'package:mall_community/common/comm_style.dart';
 
 class TabBare extends StatelessWidget {
-  TabBare({
+  const TabBare({
     super.key,
     required this.tabs,
     required this.onTap,
     required this.curr,
   });
 
-  Function(int) onTap;
+  final Function(int) onTap;
   final List tabs;
   final int curr;
 
@@ -58,7 +57,7 @@ class TabBare extends StatelessWidget {
                       tabs[i]['name'],
                       style: TextStyle(
                         fontSize: 10.sp,
-                        color: curr == i ? c_ee4c3d : c_333,
+                        color: curr == i ? cEe4c3d : c333,
                       ),
                     )
                   ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mall_community/common/commStyle.dart';
-import 'package:mall_community/components/Badge/Badge.dart';
-import 'package:mall_community/components/NewWorkImageWidget/NewWorkImageWidget.dart';
+import 'package:mall_community/common/comm_style.dart';
+import 'package:mall_community/components/custom_badge/custom_badge.dart';
+import 'package:mall_community/components/new_work_image_widget/new_work_image_widget.dart';
 
 class MyAvatar extends StatelessWidget {
   const MyAvatar({
@@ -15,7 +15,7 @@ class MyAvatar extends StatelessWidget {
 
   final String src;
   final double radius;
-  final color;
+  final Color? color;
   final double size;
   final String nums;
 

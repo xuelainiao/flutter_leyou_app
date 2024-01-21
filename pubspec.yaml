@@ -2,7 +2,7 @@ name: mall_community
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
+  sdk: ">=3.2.3 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,7 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -40,16 +39,28 @@ dependencies:
   get: ^4.6.6
   # 网络请求
   dio: ^5.4.0
+  # 时间工具
+  date_time_format: ^2.0.1
+  # 下拉刷新
+  easy_refresh: ^3.3.4
+  # 检测键盘可见
+  flutter_keyboard_visibility: ^6.0.0
+  # 扩展NestedScrollView
+  extended_nested_scroll_view: ^6.2.1
   # socket io
   socket_io_client: ^2.0.3+1
+  # 文本输入框 支持特殊文本
+  extended_text_field: ^13.0.1
   # 像素兼容
   flutter_screenutil: ^5.9.0
   # 图标
   font_awesome_flutter: ^10.6.0
+  # svg
+  flutter_svg: ^2.0.9
+  # 选择图像视频或者保存
+  images_picker: ^1.2.11
   # toast 消息提示
   flutter_easyloading: ^3.0.5
-  # 图像选择
-  images_picker: ^1.2.11
   # 设备信息
   device_info_plus: ^9.1.1
   # 本地存储
@@ -79,7 +90,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

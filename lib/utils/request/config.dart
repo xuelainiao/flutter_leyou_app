@@ -1,5 +1,4 @@
-import 'package:mall_community/common/appConfig.dart';
-import 'package:mall_community/utils/utils.dart';
+import 'package:mall_community/common/app_config.dart';
 
 class ApiConfig {
   static const int appId = 10001;

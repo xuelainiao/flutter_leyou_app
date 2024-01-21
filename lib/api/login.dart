@@ -4,5 +4,9 @@ ApiClient apiClient = ApiClient();
 
 /// 用户登录
 Future reqLogin(data) {
-  return apiClient.post('/auth/login', data: data);
+  return apiClient.request(
+    url: '/auth/login',
+    method: 'post',
+    data: data,
+  );
 }
