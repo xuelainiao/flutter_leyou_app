@@ -2,9 +2,8 @@ import 'package:mall_community/utils/utils.dart';
 
 class AppConfig {
   /// 请求地址
-  static String baseUrl = isProduction()
-      ? 'http://192.168.3.111:3000'
-      : 'https://34979mx186.imdo.co';
+  static String baseUrl =
+      isProduction() ? 'http://8.138.91.219:3000' : 'http://8.138.91.219:3000';
 
   /// Go服务器 api
   static String goBaseUrl = isProduction()
@@ -26,7 +25,7 @@ class AppConfig {
   //     : 'http://192.168.163.111:3000/socket';
 
   /// 请求超时时间
-  static Duration timeout = const Duration(seconds: 10);
+  static Duration timeout = const Duration(seconds: 60);
 
   /// AppId
   static int appId = 10001;
@@ -35,13 +34,13 @@ class AppConfig {
   static String portId = "6";
 
   /// 隐私政策是否同意
-  static bool privacyStatementHasAgree = false;
+  static bool privacyStatementHasAgree = true;
 
   /// 高德地图 ios key
-  static const String amapIosKey = "84ff226b329e87d15bef12538f7f87dc";
+  static const String amapIosKey = "b14e65b23c1df6e6baa7453e689162ff";
 
   /// 高德地图 android key
-  static const String amapAndroidKey = "84ff226b329e87d15bef12538f7f87dc";
+  static const String amapAndroidKey = "7d434952c4abaeff7dccd09c73d2b0a7";
 
   /// 高德地图 web
   static const String amapWebkey = "e7cb1a7b75b3b535ebece65ea4c64386";
@@ -51,6 +50,12 @@ class AppConfig {
 
   /// 极光推送注册id
   static String jPushId = '';
+
+  /// 腾讯云 cos 秘钥id
+  static String secretId = "AKIDpaCRXSFtR0Ris12vkXGmIxX1JPK6lIj3";
+
+  /// 腾讯云 cos 秘钥key
+  static String secretKey = "Rlx7FEF9ulcepyAD64DUeu5Rio4R4oXJ";
 
   //用于跳转H5链接，增加平台参数，用于屏蔽H5的字眼
   static const String loginPath = '/user/pages/user/login?psj_platform=APP';

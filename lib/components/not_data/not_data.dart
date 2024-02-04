@@ -40,9 +40,11 @@ class NotDataIcon extends StatelessWidget {
   }
 
   String getTitle() {
-    if (subTitle.isNotEmpty) return subTitle;
+    if (subTitle.isNotEmpty && status == NetWorkDataStatus.notData) {
+      return subTitle;
+    }
     switch (status) {
-      case NetWorkDataStatus.notLoading:
+      case NetWorkDataStatus.notLogin:
         return "哎呀 您当前还未登录呢";
       case NetWorkDataStatus.notError:
         return "哎呀 请求失败了";
@@ -50,8 +52,12 @@ class NotDataIcon extends StatelessWidget {
         return "暂时还没人找你呢 孤单的人";
       case NetWorkDataStatus.notData:
         return "没有更多数据了呢";
+      case NetWorkDataStatus.notNertwork:
+        return '哎呀 您当前网络不可用呢';
+      case NetWorkDataStatus.networkTimOut:
+        return '哎呀 请求超时了呢';
       default:
-        return '';
+        return '哎呀 加载失败了 请稍后重试';
     }
   }
 

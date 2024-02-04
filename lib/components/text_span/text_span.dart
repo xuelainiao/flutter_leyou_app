@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mall_community/components/icon_svg/icon_svg.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:mall_community/components/emoji_icon/icon_svg.dart';
 
 /// 自定义文本支持替换特殊文本
 class TextSpanEmoji extends StatelessWidget {
@@ -7,21 +9,59 @@ class TextSpanEmoji extends StatelessWidget {
     super.key,
     required this.text,
     this.style = const TextStyle(fontSize: 14),
+    this.onSelectionChanged,
   });
   final String text;
   final TextStyle style;
+  final Function(SelectedContent?)? onSelectionChanged;
+
   final RegExp emojiRegex = RegExp(r'\[[^\]]+\]');
+  final FocusNode focusNode = FocusNode();
+  SelectableRegionState? state;
+  SelectedContent? selectedContent;
+
+  /// 取消选择
+  closeSlect() {
+    focusNode.unfocus();
+  }
+
+  ///全选
+  selectAll() {
+    state?.selectAll();
+  }
+
+  ///复制选择文本
+  copy() async {
+    try {
+      await Clipboard.setData(
+          ClipboardData(text: selectedContent?.plainText ?? ''));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        style: style.copyWith(
-          textBaseline: TextBaseline.alphabetic,
+    return SelectionArea(
+      focusNode: focusNode,
+      contextMenuBuilder: (context, SelectableRegionState regionState) {
+        state = regionState;
+        return const SizedBox();
+      },
+      onSelectionChanged: (SelectedContent? select) {
+        selectedContent = select;
+        onSelectionChanged?.call(select);
+      },
+      child: Text.rich(
+        TextSpan(
+          style: style.copyWith(
+            textBaseline: TextBaseline.alphabetic,
+          ),
+          children: [
+            ...getSpansWithEmojis(text),
+          ],
         ),
-        children: [
-          ...getSpansWithEmojis(text),
-        ],
       ),
     );
   }

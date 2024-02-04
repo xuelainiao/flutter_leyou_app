@@ -10,10 +10,12 @@ class FieldCustom extends StatelessWidget {
     required this.controller,
     this.inputDecoration,
     this.change,
+    this.focusNode,
   });
 
   /// 文本框控制器
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final InputDecoration? inputDecoration;
   final Function(String)? change;
 
@@ -24,7 +26,7 @@ class FieldCustom extends StatelessWidget {
 
     return ExtendedTextField(
       key: CustomFieldModule.key,
-      autofocus: false,
+      focusNode: focusNode,
       maxLines: 4,
       minLines: 1,
       controller: controller,

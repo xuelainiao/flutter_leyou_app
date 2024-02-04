@@ -1,7 +1,9 @@
+import 'package:flutter_localization/flutter_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:mall_community/common/app_locale.dart';
 import 'package:mall_community/common/theme.dart';
 import 'package:mall_community/components/easy_refresh_diy/easy_refresh_diy.dart';
 import 'package:mall_community/router/router.dart';
@@ -15,6 +17,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyappState extends State<MyApp> {
+  final FlutterLocalization localization = FlutterLocalization.instance;
+
+  @override
+  void initState() {
+    localization.init(
+      mapLocales: [
+        const MapLocale('zh', AppLocale.en),
+        const MapLocale('en', AppLocale.en),
+        const MapLocale('km', AppLocale.km),
+        const MapLocale('ja', AppLocale.ja),
+      ],
+      initLanguageCode: 'zh',
+    );
+    localization.onTranslatedLanguage = onTranslatedLanguage;
+    super.initState();
+  }
+
+  /// 当语言更换 刷新app
+  void onTranslatedLanguage(Locale? locale) {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -34,18 +58,19 @@ class _MyappState extends State<MyApp> {
           darkTheme: AppTheme.darkTheme,
           builder: EasyLoading.init(),
           defaultTransition: Transition.rightToLeft,
-          locale: const Locale('zh'),
+          supportedLocales: localization.supportedLocales,
+          localizationsDelegates: localization.localizationsDelegates,
         );
       },
     );
   }
 }
 
-List<Locale> an = [
-  const Locale('zh', 'CN'),
-  const Locale('en', 'US'),
-];
-List<Locale> ios = [
-  const Locale('en', 'US'),
-  const Locale('zh', 'CN'),
-];
+// List<Locale> an = [
+//   const Locale('zh', 'CN'),
+//   const Locale('en', 'US'),
+// ];
+// List<Locale> ios = [
+//   const Locale('en', 'US'),
+//   const Locale('zh', 'CN'),
+// ];

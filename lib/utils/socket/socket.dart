@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:mall_community/common/app_config.dart';
 import 'package:mall_community/modules/user_module.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class SocketManager {
@@ -94,7 +93,7 @@ class SocketManager {
       });
       return;
     }
-    if (_socket != null && _socket!.connected) {
+    if (_socket!.connected) {
       data ??= {};
       data['token'] = UserInfo.token;
       _socket!.emit(event, data);
@@ -108,10 +107,9 @@ class SocketManager {
     }
     subscribeList.add(event);
     _socket?.on(event, (data) {
-      if (data['data']['messageType'] == 'text') {
-        data = SendMsgDto(data['data']);
+      if (data['code'] == 200) {
+        callback(data);
       }
-      callback(data);
     });
   }
 

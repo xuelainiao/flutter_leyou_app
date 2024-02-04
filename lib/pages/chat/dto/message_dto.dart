@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:mall_community/pages/chat/controller/chat_controller.dart';
+
 /// Im消息DTO
 class SendMsgDto {
   /// 消息体
@@ -12,31 +16,23 @@ class SendMsgDto {
   /// 消息类型
   late String messageType;
 
-  /// 文件宽 针对图片类型
-  int? width;
-
-  /// 文件高 针对图片类型
-  int? height;
-
   /// 当前时间戳
   int? time;
 
-  /// 文件名
-  String? fileName;
+  /// 消息状态-前端自己维护不上传-用于消息发送状态效果
+  CustomMsgStatus? status;
 
-  /// 文件大小
-  int? fileSize;
-
-  SendMsgDto(Map json) {
-    content = json['content'];
+  SendMsgDto(Map json, {SendMsgDto? quote}) {
+    messageType = json['messageType'];
+    content =
+        json['content'] is Map ? jsonEncode(json['content']) : json['content'];
+    if (quote != null) {
+      content = jsonEncode({'content': content, 'quote': quote.toJson()});
+      messageType = MessageType.reply;
+    }
     friendId = json['friendId'];
     userId = json['userId'] ?? "";
-    messageType = json['messageType'];
-    width = json['width'] ?? 0;
-    height = json['height'] ?? 0;
-    fileName = json['fileName'] ?? "";
-    fileSize = json['fileSize'] ?? 0;
-    time = DateTime.now().millisecondsSinceEpoch;
+    time = json['time'] ?? DateTime.now().millisecondsSinceEpoch;
   }
 
   Map<String, dynamic> toJson() {
@@ -45,17 +41,67 @@ class SendMsgDto {
       'friendId': friendId,
       'userId': userId,
       'messageType': messageType,
-      'width': width,
-      'height': height,
       'time': time,
-      'fileName': fileName,
-      'fileSize': fileSize,
     };
   }
 
   @override
   String toString() {
     return toJson().toString();
+  }
+}
+
+/// 文件消息信息
+class FileMsgInfo {
+  /// 文件名
+  String? fileName;
+
+  /// 文件大小|录音时长
+  late int fileSize;
+
+  ///视频封面
+  late String cover;
+
+  ///文件内容或者地址
+  late String content;
+
+  FileMsgInfo(dynamic json) {
+    if (json is String) {
+      content = json;
+    } else {
+      fileName = json['fileName'] ?? "";
+      fileSize = json['fileSize'] ?? json['second'] ?? 0;
+      content = json['content'] ?? json['url'] ?? '';
+      cover = json['cover'] ?? '';
+    }
+  }
+
+  toJsonString() {
+    return jsonEncode({
+      'fileName': fileName,
+      'fileSize': fileSize,
+      'content': content,
+      'cover': cover,
+    });
+  }
+}
+
+/// 引用消息DTO
+class QuoteMsgDto extends SendMsgDto {
+  late SendMsgDto quote;
+
+  QuoteMsgDto(Map json) : super(json) {
+    Map textData = jsonDecode(json['content']);
+    content = textData['content'] ?? '';
+    quote = SendMsgDto(textData['quote']);
+    messageType = MessageType.reply;
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    final json = super.toJson();
+    json['quote'] = quote.toJson();
+    return json;
   }
 }
 
@@ -90,4 +136,7 @@ class MessageType {
 
   /// 红包
   static const String system = 'system';
+
+  /// 回复
+  static const String reply = 'reply';
 }

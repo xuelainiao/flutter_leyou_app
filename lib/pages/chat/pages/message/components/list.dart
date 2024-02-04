@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/common/theme.dart';
 import 'package:mall_community/components/loading/loading.dart';
 import 'package:mall_community/modules/user_module.dart';
 import 'package:mall_community/pages/chat/dto/message_dto.dart';
-import 'package:mall_community/pages/chat/module/chat_module.dart';
-import 'package:mall_community/pages/chat/pages/message/components/message_box.dart';
+import 'package:mall_community/pages/chat/controller/chat_controller.dart';
+import 'package:mall_community/pages/chat/pages/message/components/bottom_input.dart';
+import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/message_box.dart';
+import 'package:mall_community/utils/overlay_manager/overlay_manager.dart';
 
 ///好友聊天消息列表
 class MessageList extends StatefulWidget {
@@ -17,7 +20,7 @@ class MessageList extends StatefulWidget {
 }
 
 class _MessageListState extends State<MessageList> {
-  ChatModule chatModule = Get.find();
+  ChatController chatController = Get.find();
   GlobalKey centerKey = GlobalKey();
   bool isToBottom = false;
   late Worker everCallBack;
@@ -26,7 +29,7 @@ class _MessageListState extends State<MessageList> {
   void initState() {
     super.initState();
 
-    everCallBack = ever(chatModule.newMsgList, (list) {
+    everCallBack = ever(chatController.newMsgList, (list) {
       msgNextTick();
       everCallBack.call();
     });
@@ -34,12 +37,12 @@ class _MessageListState extends State<MessageList> {
 
   /// 首次监听消息列表渲染完毕
   msgNextTick() {
-    if (chatModule.params['page'] == 1 && !isToBottom) {
+    if (chatController.params['page'] == 1 && !isToBottom) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (chatModule.params['page'] == 1 &&
-            chatModule.scrollControll.position.maxScrollExtent > 40) {
+        if (chatController.params['page'] == 1 &&
+            chatController.scrollControll.position.maxScrollExtent > 40) {
           isToBottom = true;
-          chatModule.toBottom();
+          chatController.toBottom();
         }
       });
     }
@@ -49,13 +52,13 @@ class _MessageListState extends State<MessageList> {
   scrollListener(ScrollMetrics metrics) {
     if (metrics.extentBefore < 50 &&
         metrics.axis == Axis.vertical &&
-        metrics.extentAfter > chatModule.extentAfter &&
-        chatModule.extentAfter > 50) {
-      if (!chatModule.loading.value && chatModule.params['page'] >= 1) {
-        chatModule.getHistoryMsg();
+        metrics.extentAfter > chatController.extentAfter &&
+        chatController.extentAfter > 50) {
+      if (!chatController.loading.value && chatController.params['page'] >= 1) {
+        chatController.getHistoryMsg();
       }
     }
-    chatModule.extentAfter = metrics.extentAfter;
+    chatController.extentAfter = metrics.extentAfter;
   }
 
   @override
@@ -77,64 +80,71 @@ class _MessageListState extends State<MessageList> {
           }
           return false;
         },
-        child: Container(
-          color: AppTheme.mode == ThemeMode.dark ? null : Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 14.w),
-          child: Stack(
-            children: [
-              CustomScrollView(
-                controller: chatModule.scrollControll,
-                center: centerKey,
-                physics: const ClampingScrollPhysics(),
-                slivers: [
-                  Obx(() {
-                    if (!chatModule.loading.value) {
-                      return const SliverPadding(
-                        padding: EdgeInsets.all(0),
+        child: GestureDetector(
+          onVerticalDragDown: (de) {
+            OverlayManager().removeOverlay(chatController.toolBarKey);
+            MsgBotInputModule.hideBootoMenu();
+          },
+          child: Container(
+            color: AppTheme.mode == ThemeMode.dark ? null : cF1f1f1,
+            padding: EdgeInsets.symmetric(horizontal: 14.w),
+            child: Stack(
+              children: [
+                CustomScrollView(
+                  controller: chatController.scrollControll,
+                  center: centerKey,
+                  physics: const ClampingScrollPhysics(),
+                  slivers: [
+                    Obx(() {
+                      if (!chatController.loading.value) {
+                        return const SliverPadding(
+                          padding: EdgeInsets.all(0),
+                        );
+                      } else {
+                        return const SliverToBoxAdapter(child: LoadingText());
+                      }
+                    }),
+                    Obx(() {
+                      return SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, i) {
+                            return buildItem(chatController.msgHistoryList[i]);
+                          },
+                          childCount: chatController.msgHistoryList.length,
+                        ),
                       );
-                    } else {
-                      return const SliverToBoxAdapter(child: LoadingText());
-                    }
-                  }),
-                  Obx(() {
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) {
-                          return buildItem(chatModule.msgHistoryList[i]);
-                        },
-                        childCount: chatModule.msgHistoryList.length,
-                      ),
-                    );
-                  }),
-                  SliverPadding(
-                    padding: EdgeInsets.zero,
-                    key: centerKey,
-                  ),
-                  Obx(() {
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) {
-                          return buildItem(chatModule.newMsgList[i]);
-                        },
-                        childCount: chatModule.newMsgList.length,
-                      ),
-                    );
-                  }),
-                ],
-              )
-            ],
+                    }),
+                    SliverPadding(
+                      padding: EdgeInsets.zero,
+                      key: centerKey,
+                    ),
+                    Obx(() {
+                      return SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, i) {
+                            return buildItem(chatController.newMsgList[i]);
+                          },
+                          childCount: chatController.newMsgList.length,
+                        ),
+                      );
+                    }),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  buildItem(SendMsgDto item) {
-    bool isMy = chatModule.isMy(item.userId);
+  Widget buildItem(SendMsgDto item) {
+    bool isMy = chatController.isMy(item.userId);
     return MessageBox(
       isMy: isMy,
-      avatar: isMy ? UserInfo.user['avatar'] : chatModule.params['avatar'],
+      avatar: isMy ? UserInfo.user['avatar'] : chatController.params['avatar'],
       item: item,
+      toolBarKey: chatController.toolBarKey,
     );
   }
 }

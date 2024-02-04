@@ -1,3 +1,4 @@
+import 'package:amap_flutter_location/amap_flutter_location.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mall_community/app.dart';
@@ -11,10 +12,21 @@ void main() async {
 }
 
 init() async {
+  /// 确保初始化完成
+  WidgetsFlutterBinding.ensureInitialized();
+
   await GetStorage.init();
 
   // 隐私政策
   AppConfig.privacyStatementHasAgree =
       Storage().read('privacyStatementHasAgree') ?? false;
   UserInfo.token = Storage().read('token') ?? '';
+
+  // 地图设值
+  AMapFlutterLocation.setApiKey(
+    AppConfig.amapAndroidKey,
+    AppConfig.amapIosKey,
+  );
+  AMapFlutterLocation.updatePrivacyShow(true, true);
+  AMapFlutterLocation.updatePrivacyAgree(true);
 }

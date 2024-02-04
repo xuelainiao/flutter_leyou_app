@@ -39,16 +39,29 @@ dependencies:
   get: ^4.6.6
   # 网络请求
   dio: ^5.4.0
+  # 视频播放
+  chewie: ^1.7.4
+  video_player: ^2.8.2
+  # better_player: ^0.0.83
+  # 缓存管理 支持下载文件临时缓存
+  flutter_cache_manager: ^3.3.1
+  # socket io
+  socket_io_client: ^2.0.3+1
+  # 腾讯云cos上传
+  tencentcloud_cos_sdk_plugin: ^1.1.0
+  tencent_cos_plus: ^1.2.1
+  # 国际化本地化
+  flutter_localization: ^0.2.0
   # 时间工具
   date_time_format: ^2.0.1
   # 下拉刷新
   easy_refresh: ^3.3.4
   # 检测键盘可见
   flutter_keyboard_visibility: ^6.0.0
+  # widget 可见性
+  visibility_detector: ^0.4.0+2
   # 扩展NestedScrollView
   extended_nested_scroll_view: ^6.2.1
-  # socket io
-  socket_io_client: ^2.0.3+1
   # 文本输入框 支持特殊文本
   extended_text_field: ^13.0.1
   # 像素兼容
@@ -59,6 +72,8 @@ dependencies:
   flutter_svg: ^2.0.9
   # 选择图像视频或者保存
   images_picker: ^1.2.11
+  # 文件选择
+  file_picker: ^6.1.1
   # toast 消息提示
   flutter_easyloading: ^3.0.5
   # 设备信息
@@ -73,6 +88,16 @@ dependencies:
   flutter_swipe_action_cell: ^3.1.3
   # 多功能缓存图片组件
   extended_image: ^8.2.0
+  # 音频录音
+  flutter_sound: ^9.2.13
+  # 权限判断
+  permission_handler: ^11.2.0
+  # 文件地址 目前用于录音临时文件地址
+  path_provider: ^2.1.2
+  # 高德地图定位和搜索
+  amap_flutter_map: ^3.0.0
+  amap_flutter_base: ^3.0.0
+  amap_flutter_location: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +124,7 @@ flutter:
   assets:
     - lib/assets/image/login/
     - lib/assets/lottie/
+    - lib/assets/image/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

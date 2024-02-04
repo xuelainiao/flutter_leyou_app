@@ -1,6 +1,6 @@
 import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:mall_community/components/icon_svg/icon_svg.dart';
+import 'package:mall_community/components/emoji_icon/icon_svg.dart';
 
 class EmojiText extends SpecialText {
   EmojiText(TextStyle? textStyle, {this.start})

@@ -88,21 +88,26 @@ class ApiClient {
     }
   }
 
-  /// 上传文件
-  Future<ApiResponse<T>> uploadFile<T>(dio.MultipartFile file,
-      {String type = 'video'}) async {
+  /// 上传文件 上传到 cos
+  Future<ApiResponse<T>> uploadFile<T>(
+    List files, {
+    String type = 'image',
+  }) async {
     try {
-      final formData = dio.FormData.fromMap({
-        'name': 'iFile',
-        'date': DateTime.now().toIso8601String(),
-        'iFile': file
-      });
-      String url = '/api/file.upload/video';
+      late dio.FormData formData;
       if (type == 'image') {
-        url = '/shop/v1/file.upload/image';
+        formData = dio.FormData.fromMap({'files': files});
+      } else {
+        formData = dio.FormData.fromMap({'file': files[0], 'cover': files[1]});
       }
-      _dio.options.baseUrl = AppConfig.baseUrl;
-      final response = await _dio.post(url, data: formData);
+      final response = await _dio.request(
+        type == 'image' ? '/auth/upload' : '/auth/upload/video',
+        data: formData,
+        options: dio.Options(
+          method: 'post',
+          headers: {'content-type': 'multipart/form-data'},
+        ),
+      );
       return ApiResponse.fromJson(response.data);
     } on dio.DioException catch (e) {
       throw e.error ??

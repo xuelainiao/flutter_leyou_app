@@ -5,6 +5,7 @@ import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/not_data/not_data.dart';
 import 'package:mall_community/utils/request/dio_response.dart';
 import 'package:mall_community/utils/request/error_exception.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 ///文本加载组件
 class LoadingText extends StatelessWidget {
@@ -64,11 +65,13 @@ class LoadingPage extends StatefulWidget {
 
 class _LoadingPageState extends State<LoadingPage> {
   int status = NetWorkDataStatus.notLoading;
+  late Key key;
+  late final AppLifecycleListener listener;
 
   getData() async {
     try {
       ApiResponse result = await widget.fetch.call();
-      int status = NetWorkDataStatus.loadingOK;
+      status = NetWorkDataStatus.loadingOK;
       if (widget.showEmpty) {
         if (result.data is List && result.data.lenth == 0) {
           status = NetWorkDataStatus.notData;
@@ -81,9 +84,7 @@ class _LoadingPageState extends State<LoadingPage> {
       // 延迟500ms加载 请求状态切换太快会闪烁
       Future.delayed(const Duration(milliseconds: 500), () {
         if (!mounted) return;
-        setState(() {
-          status = status;
-        });
+        setState(() {});
       });
     } on ApiError catch (e) {
       setState(() {
@@ -96,20 +97,35 @@ class _LoadingPageState extends State<LoadingPage> {
     } finally {}
   }
 
+  onShow() {
+    if (status == NetWorkDataStatus.notLogin) {
+      getData();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    key = UniqueKey();
     getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return getWidget();
+    return VisibilityDetector(
+      key: key,
+      child: getWidget(),
+      onVisibilityChanged: (VisibilityInfo state) {
+        if (state.visibleFraction == 1) {
+          onShow();
+        }
+      },
+    );
   }
 
   getWidget() {
-    late String label;
-    late Function callback;
+    String? label;
+    Function? callback;
     if (status == NetWorkDataStatus.notLogin) {
       label = '前往登录';
       callback = () {
@@ -137,5 +153,10 @@ class _LoadingPageState extends State<LoadingPage> {
         ),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

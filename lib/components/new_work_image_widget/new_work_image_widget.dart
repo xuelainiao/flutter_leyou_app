@@ -93,11 +93,11 @@ class _NewWorkImgState extends State<NetWorkImg> {
                     case LoadState.completed:
                       return null;
                     case LoadState.failed:
-                      if (loadNum == widget.loadNum) {
+                      if (loadNum >= widget.loadNum) {
                         return errWidget();
                       } else {
                         state.reLoadImage();
-                        return const SizedBox();
+                        return loading();
                       }
                   }
                 },
@@ -112,7 +112,7 @@ class _NewWorkImgState extends State<NetWorkImg> {
       child: Container(
         width: widget.width,
         height: widget.height,
-        color: Colors.white,
+        color: Colors.grey.shade300,
         alignment: Alignment.center,
       ),
     );
