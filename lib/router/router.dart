@@ -4,7 +4,6 @@ import 'package:mall_community/pages/home/home_table.dart';
 import 'package:mall_community/pages/login/login.dart';
 import 'package:mall_community/pages/map_search/map_search.dart';
 import 'package:mall_community/pages/preview_image/preview_image.dart';
-import 'package:mall_community/pages/preview_video/preview_video.dart';
 import 'package:mall_community/pages/privacy_statement/privacy_statement.dart';
 
 class AppPages {
@@ -28,13 +27,6 @@ class AppPages {
       opaque: false,
       showCupertinoParallax: false,
       transition: Transition.noTransition,
-    ),
-
-    // 视频预览
-    GetPage(
-      name: '/previewVideo',
-      page: () => const PreviewVideo(),
-      transition: Transition.fade,
     ),
 
     // 地图

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
-import 'package:mall_community/components/Avatar/Avatar.dart';
+import 'package:mall_community/components/avatar/avatar.dart';
+import 'package:mall_community/components/pop_menu/pop_menu.dart';
 import 'package:mall_community/components/text_span/text_span.dart';
 import 'package:mall_community/pages/chat/dto/message_dto.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
@@ -13,9 +15,11 @@ import 'package:mall_community/pages/chat/pages/message/components/msg_type_widg
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/location_msg.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_tool_bar.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/reply_msg.dart';
+import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/video_msg.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/voice_msg.dart';
 import 'package:mall_community/utils/overlay_manager/overlay_manager.dart';
 import 'package:mall_community/utils/toast/toast.dart';
+import 'package:mall_community/utils/utils.dart';
 
 /// 消息 item
 class MessageBox extends StatelessWidget {
@@ -33,18 +37,23 @@ class MessageBox extends StatelessWidget {
   final UniqueKey toolBarKey;
   final GlobalKey msgKey = GlobalKey();
   final GlobalKey textSpanEmojiKey = GlobalKey();
+  final ChatController chatController = Get.find();
   Timer? timer;
   SelectedContent? textSelection;
   SelectionChangedCause? selectCause;
 
   onLongPress() {
+    Rect? targetRect = getRect(msgKey);
     OverlayManager().showOverlay(
-      MsgToolBar(
-        msgKey: msgKey,
-        isMy: isMy,
-        item: item,
-        toolBarKey: toolBarKey,
-        copyText: copyText,
+      CustomPopup(
+        targetRect: targetRect!,
+        backgroundColor: routineTextC,
+        child: MsgToolBar(
+          isMy: isMy,
+          item: item,
+          toolBarKey: toolBarKey,
+          copyText: copyText,
+        ),
       ),
       toolBarKey,
       isAnimate: false,
@@ -52,8 +61,9 @@ class MessageBox extends StatelessWidget {
   }
 
   // 文本消息选择回调
-  msgTextSelectChange(SelectedContent? selectedContent) {
+  msgTextSelectChange(SelectedContent? selectedContent, FocusNode f) {
     textSelection = selectedContent;
+    chatController.textSelectFocusNode = f;
     if (timer != null) {
       timer!.cancel();
       timer = null;
@@ -66,7 +76,7 @@ class MessageBox extends StatelessWidget {
   }
 
   // 文本复制
-  copyText() async {
+  void copyText() async {
     if (item.messageType == MessageType.text) {
       // 文本是否有选中的
       if (textSelection != null) {
@@ -84,8 +94,7 @@ class MessageBox extends StatelessWidget {
 
   ///取消选择 当用户点击其他地方时取消选择
   closeFocusNode() {
-    TextSpanEmoji? spanEmoji = textSpanEmojiKey.currentWidget as TextSpanEmoji;
-    spanEmoji.closeSlect();
+    chatController.textSelectFocusNode.unfocus();
   }
 
   @override
@@ -165,9 +174,9 @@ class MessageBox extends StatelessWidget {
           style: tx14.copyWith(
             color: isMy ? Colors.white : Colors.black87,
           ),
-          onSelectionChanged: (SelectedContent? selectedContent) {
+          onSelectionChanged: (SelectedContent? selectedContent, FocusNode f) {
             if (selectedContent != null) {
-              msgTextSelectChange(selectedContent);
+              msgTextSelectChange(selectedContent, f);
             }
           },
         ),
@@ -206,6 +215,8 @@ class MsgTypeWidget extends StatelessWidget {
         LocationMsg(item: item, key: key),
     MessageType.reply: (item, isMy, key) =>
         ReplyMsg(item: item, isMy: isMy, msgKey: key),
+    MessageType.video: (item, isMy, key) =>
+        VideoMsg(item: item, isMy: isMy),
   };
 
   @override

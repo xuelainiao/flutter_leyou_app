@@ -14,7 +14,7 @@ class ImageMsg extends StatelessWidget {
 
   tap(url) {
     Get.toNamed('/previewImage', arguments: {
-      'list': ['https://$url?time=${item.time}']
+      'list': ['$url?time=${item.time}']
     });
   }
 
@@ -36,12 +36,12 @@ class ImageMsg extends StatelessWidget {
           tap(fileMsgInfo.content);
         },
         child: Hero(
-          tag: 'https://${fileMsgInfo.content}?time=${item.time}',
+          tag: '${fileMsgInfo.content}?time=${item.time}',
           placeholderBuilder: (context, heroSize, child) {
             return child;
           },
           child: NetWorkImg(
-            'https://${fileMsgInfo.content}?time=${item.time}',
+            '${fileMsgInfo.content}?time=${item.time}',
             fit: BoxFit.contain,
             raduis: 10,
           ),

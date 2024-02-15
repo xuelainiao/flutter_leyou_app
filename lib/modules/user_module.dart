@@ -20,6 +20,8 @@ class UserInfo {
   /// 用户token
   static String token = '';
 
+
+
   /// 用户信息
   static Map get user {
     if (UserInfo.info.isEmpty) {

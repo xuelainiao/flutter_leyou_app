@@ -13,6 +13,9 @@ class SendMsgDto {
   /// 用户ID
   late String userId;
 
+  /// 发送者用户名
+  late String userName;
+
   /// 消息类型
   late String messageType;
 
@@ -32,6 +35,7 @@ class SendMsgDto {
     }
     friendId = json['friendId'];
     userId = json['userId'] ?? "";
+    userName = json['userName'] ?? "";
     time = json['time'] ?? DateTime.now().millisecondsSinceEpoch;
   }
 

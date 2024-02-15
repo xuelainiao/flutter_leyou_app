@@ -2,7 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:get/get.dart';
+import 'package:mall_community/components/drag_bottom_dismiss/drag_bottom_pop_sheet.dart';
 import 'dart:math';
 import 'package:mall_community/components/new_work_image_widget/new_work_image_widget.dart';
 import 'package:mall_community/utils/cache_manager/cache_manager.dart';
@@ -10,33 +10,34 @@ import 'package:video_player/video_player.dart';
 
 /// 视频预览页面
 class PreviewVideo extends StatefulWidget {
-  const PreviewVideo({super.key});
+  final String url;
+  final String cover;
+
+  const PreviewVideo({super.key, required this.url, required this.cover});
 
   @override
   State<PreviewVideo> createState() => _PreviewVideoState();
 }
 
 class _PreviewVideoState extends State<PreviewVideo> {
-  late String url = '';
-  late String cover = '';
   VideoPlayerController? videoPlayerController;
   ChewieController? chewieController;
   late Chewie playerWidget;
 
   init() async {
-    FileInfo? fileInfo = await FileCacheManager.getFileFromCache(url);
+    FileInfo? fileInfo = await FileCacheManager.getFileFromCache(widget.url);
     if (fileInfo != null) {
       videoPlayerController = VideoPlayerController.file(fileInfo.file)
         ..initialize().then((value) {
           setChewie();
         });
     } else {
-      videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url))
+      videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.url))
         ..initialize().then((_) {
           setChewie();
-          FileCacheManager.downloadFile(url);
+          FileCacheManager.downloadFile(widget.url);
         }).catchError((err) {
-          debugPrint('catchError $err  $url');
+          debugPrint('catchError $err  ${widget.url}');
         });
     }
   }
@@ -56,34 +57,30 @@ class _PreviewVideoState extends State<PreviewVideo> {
 
   @override
   void initState() {
-    Map? params = Get.arguments;
-    if (params != null) {
-      url = params['url'] ?? '';
-      cover = params['cover'] ?? '';
-    }
     init();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: videoPlayerController != null &&
-              videoPlayerController!.value.isInitialized &&
-              chewieController != null
-          ? Hero(
-              tag: cover,
-              child: SafeArea(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: playerWidget,
-                ),
-              ),
-            )
-          : NetWorkImg(cover),
+      backgroundColor: Colors.transparent,
+      body: DragBottomPopGesture(
+        child: Hero(
+          tag: widget.cover,
+          child: SafeArea(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: videoPlayerController != null &&
+                      videoPlayerController!.value.isInitialized &&
+                      chewieController != null
+                  ? playerWidget
+                  : Align(child: NetWorkImg(widget.cover)),
+            ),
+          ),
+        ),
+      ),
     );
   }
 

@@ -98,6 +98,8 @@ dependencies:
   amap_flutter_map: ^3.0.0
   amap_flutter_base: ^3.0.0
   amap_flutter_location: ^3.0.0
+  # 向上滑动的面板，适合地图场景
+  sliding_up_panel: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:

@@ -97,6 +97,7 @@ class _NewWorkImgState extends State<NetWorkImg> {
                         return errWidget();
                       } else {
                         state.reLoadImage();
+                        loadNum += 1;
                         return loading();
                       }
                   }

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:mall_community/common/app_config.dart';
 import 'package:mall_community/modules/user_module.dart';
+import 'package:mall_community/utils/socket/socket_event.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class SocketManager {
@@ -15,7 +16,10 @@ class SocketManager {
   Function? _initCallBack;
 
   /// 当前订阅消息事件
-  List<String> subscribeList = [];
+  Map<String, dynamic> subscribeMap = {};
+
+  /// 当前加入的房间列表
+  List<String> roomList = [];
 
   ///当前消息发送缓存队列
   List<Map<String, dynamic>> emits = [];
@@ -43,8 +47,9 @@ class SocketManager {
       }
     });
     _initCallBack = initCallBack;
-    _socket?.onConnect(onConnect);
-    _socket?.onDisconnect(onDisconnect);
+    _socket?.onConnect(_onConnect);
+    _socket?.onDisconnect(_onDisconnect);
+    _socket?.onConnectTimeout(_onTimeOut);
     _socket?.onConnectError((err) {
       debugPrint('socket 连接错误 $err');
       _status = 2;
@@ -79,7 +84,20 @@ class SocketManager {
 
   /// 断开连接
   void disconnect() {
+    roomList.clear();
+    emits.clear();
     _socket?.dispose();
+  }
+
+  ///加入房间
+  void addRoom(String roomId) {
+    sendMessage(SocketEvent.joinFriendSocket, data: {'friendId': roomId});
+    roomList.add(roomId);
+  }
+
+  /// 退出房间
+  void exitRoom(String roomId) {
+    roomList.remove(roomId);
   }
 
   /// 发送消息
@@ -96,18 +114,21 @@ class SocketManager {
     if (_socket!.connected) {
       data ??= {};
       data['token'] = UserInfo.token;
-      _socket!.emit(event, data);
+      _socket!.emitWithAck(event, data);
     }
   }
 
   /// 消息事件订阅
   void subscribe(String event, Function(dynamic) callback) {
-    if (subscribeList.contains(event)) {
+    if (subscribeMap.containsKey(event)) {
       return;
     }
-    subscribeList.add(event);
+    subscribeMap[event] = callback;
     _socket?.on(event, (data) {
       if (data['code'] == 200) {
+        if (event == SocketEvent.joinFriendSocket) {
+          _onAddRomm();
+        }
         callback(data);
       }
     });
@@ -116,13 +137,30 @@ class SocketManager {
   ///清除订阅
   void unSubscribe(String event) {
     _socket?.off(event);
-    subscribeList.remove(event);
+    subscribeMap.clear();
   }
 
   /// 连接成功
-  onConnect(e) {
+  _onConnect(e) {
     debugPrint('socket 连接成功$e');
     _status = 1;
+    if (roomList.isNotEmpty) {
+      List rooms = List.from(roomList);
+      roomList.clear();
+      for (String roomId in rooms) {
+        addRoom(roomId);
+      }
+    }
+  }
+
+  /// 断开连接回调
+  _onDisconnect(e) {
+    debugPrint('socket 断链 $e');
+    _status = 2;
+  }
+
+  /// 加入房间成功
+  _onAddRomm() {
     if (emits.isNotEmpty) {
       for (var item in emits) {
         sendMessage(item['event'], data: item['data']);
@@ -131,9 +169,8 @@ class SocketManager {
     }
   }
 
-  /// 断开连接
-  onDisconnect(e) {
-    debugPrint('socket 断链 $e');
-    _status = 2;
+  /// 消息发送超时
+  _onTimeOut(data){
+    debugPrint("链接超时 $data");
   }
 }

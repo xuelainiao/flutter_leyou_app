@@ -5,17 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mall_community/common/app_config.dart';
+import 'package:mall_community/common/comm_style.dart';
+import 'package:mall_community/components/loading/loading.dart';
 import 'package:mall_community/components/not_data/not_data.dart';
 import 'package:mall_community/utils/toast/toast.dart';
 
 class AddressPoiList extends StatefulWidget {
   const AddressPoiList({
     super.key,
-    required this.latLng,
+    this.latLng,
     required this.setAddress,
   });
 
-  final LatLng latLng;
+  final LatLng? latLng;
 
   final Function(Map) setAddress;
 
@@ -31,6 +33,7 @@ class _AddressPoiListState extends State<AddressPoiList> {
 
   List list = [];
   Dio dio = Dio();
+  bool loading = false;
   Map<String, dynamic> query = {
     'keywords': '', //多个关键字用“|”分割
     'types': '120000', //查询POI类型 多个类型用“|”分割
@@ -38,7 +41,12 @@ class _AddressPoiListState extends State<AddressPoiList> {
     'key': AppConfig.amapWebkey,
   };
   getList() {
-    query['location'] = "${widget.latLng.latitude},${widget.latLng.longitude}";
+    if (widget.latLng == null) return;
+    query['location'] =
+        "${widget.latLng!.latitude},${widget.latLng!.longitude}";
+    setState(() {
+      loading = true;
+    });
     dio
         .get("https://restapi.amap.com/v3/place/around",
             queryParameters: query, options: Options())
@@ -52,7 +60,11 @@ class _AddressPoiListState extends State<AddressPoiList> {
       setState(() {
         list.addAll(res.data['suggestion']['keywords']);
         list.addAll(res.data['pois']);
+        loading = false;
       });
+      if (query['page'] == 1) {
+        addressClick(list[0]);
+      }
     });
   }
 
@@ -89,39 +101,24 @@ class _AddressPoiListState extends State<AddressPoiList> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    getList();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        input(),
-        Expanded(
-          child: list.isEmpty
-              ? SizedBox(
-                  width: 200.r,
-                  height: 200.r,
-                  child: const NotDataIcon(
-                    status: NetWorkDataStatus.notData,
-                  ))
-              : EasyRefresh(
-                  onLoad: () {
-                    query['page'] += 1;
-                    getList();
-                  },
-                  child: ListView.builder(
-                    itemCount: list.length,
-                    padding: EdgeInsets.only(
-                      bottom: ScreenUtil().bottomBarHeight,
-                    ),
-                    itemBuilder: (context, index) => itemBuild(list[index]),
-                  ),
-                ),
-        )
-      ],
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            width: 100,
+            height: 8,
+            margin: const EdgeInsets.only(top: 10),
+            decoration: BoxDecoration(
+              color: HexThemColor(backgroundColor),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          input(),
+          Expanded(child: addressList())
+        ],
+      ),
     );
   }
 
@@ -132,7 +129,7 @@ class _AddressPoiListState extends State<AddressPoiList> {
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: const Color.fromRGBO(241, 241, 241, 1),
+        color: HexThemColor(backgroundColor),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: TextField(
@@ -155,6 +152,35 @@ class _AddressPoiListState extends State<AddressPoiList> {
     );
   }
 
+  Widget addressList() {
+    if (loading && list.isEmpty) {
+      return const LoadingText();
+    }
+    if (list.isNotEmpty) {
+      return EasyRefresh(
+        onLoad: () {
+          query['page'] += 1;
+          getList();
+        },
+        child: ListView.builder(
+          itemCount: list.length,
+          padding: EdgeInsets.only(
+            bottom: ScreenUtil().bottomBarHeight,
+          ),
+          itemBuilder: (context, index) => itemBuild(list[index]),
+        ),
+      );
+    } else {
+      return SizedBox(
+        width: 200.r,
+        height: 200.r,
+        child: const NotDataIcon(
+          status: NetWorkDataStatus.notData,
+        ),
+      );
+    }
+  }
+
   Widget itemBuild(item) {
     return Container(
       height: 64.h,
@@ -172,7 +198,7 @@ class _AddressPoiListState extends State<AddressPoiList> {
             : null,
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 14),
         title: Text(item['name']),
-        subtitle: Text(item['address']),
+        subtitle: Text(item['address'] is String ? item['address'] : ''),
         onTap: () {
           addressClick(item);
         },

@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:mall_community/pages/chat/dto/message_dto.dart';
 import 'package:mall_community/utils/request/dio.dart';
+import 'package:mall_community/utils/tx_cos/tx_cos.dart';
 
 /// app 选择文件
 class AppFilePicker {
@@ -25,12 +26,11 @@ class AppFilePicker {
       result.files[0].path!,
       filename: result.files[0].name,
     );
-    var resultFile = await apiClient.uploadFile([file]);
+    var cosFileUrl = await UploadDio.upload(result.files[0].path!);
     FileMsgInfo fileMsgInfo = FileMsgInfo({
-      'content': '${resultFile.data['list'][0]['url']}',
+      'content': cosFileUrl,
       'fileName': file.filename,
       'fileSize': file.length,
-      'requestId': resultFile.data['list'][0]['requestId']
     });
     return fileMsgInfo;
   }

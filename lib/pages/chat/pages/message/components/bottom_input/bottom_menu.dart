@@ -50,11 +50,11 @@ class ChatBottomMenu extends StatelessWidget {
   }
 
   imageMsg() async {
-    List result = await selectImguploadFile();
-    if (result.isEmpty) return;
-    for (var item in result) {
+    List cosUrls = await selectImguploadFile();
+    if (cosUrls.isEmpty) return;
+    for (var item in cosUrls) {
       chatController.sendMsg(
-        jsonEncode({'content': item['url']}),
+        jsonEncode({'content': item}),
         type: MessageType.image,
       );
     }
@@ -87,17 +87,19 @@ class ChatBottomMenu extends StatelessWidget {
 
   location() async {
     var result = await Get.toNamed('/map');
-    String data = jsonEncode({
-      'address': result['address'],
-      'name': result['name'],
-      'province': result['province'],
-      'street': result["street"],
-      'district': result["district"],
-      "latitude": result["latitude"],
-      "longitude": result['longitude'],
-      "description": result['description'],
-    });
-    chatController.sendMsg(data, type: MessageType.location);
+    if (result != null) {
+      String data = jsonEncode({
+        'address': result['address'],
+        'name': result['name'],
+        'province': result['province'],
+        'street': result["street"],
+        'district': result["district"],
+        "latitude": result["latitude"],
+        "longitude": result['longitude'],
+        "description": result['description'],
+      });
+      chatController.sendMsg(data, type: MessageType.location);
+    }
   }
 
   @override

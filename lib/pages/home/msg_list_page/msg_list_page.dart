@@ -21,7 +21,7 @@ class MsgListPage extends StatefulWidget {
 
 class _MsgListPageState extends State<MsgListPage>
     with TickerProviderStateMixin {
-  MsgListModule ChatController = Get.put(MsgListModule());
+  final MsgListModule chatController = Get.put(MsgListModule());
   late SocketManager socketManager;
   late TabController tabController;
   final tabs = [
@@ -39,9 +39,9 @@ class _MsgListPageState extends State<MsgListPage>
     );
     tabController = TabController(length: tabs.length, vsync: this);
     tabController.addListener(() {
-      ChatController.easyRefreshController.resetFooter();
+      chatController.easyRefreshController.resetFooter();
     });
-    ChatController.easyRefreshController = EasyRefreshController(
+    chatController.easyRefreshController = EasyRefreshController(
       controlFinishLoad: true,
     );
   }
@@ -50,10 +50,10 @@ class _MsgListPageState extends State<MsgListPage>
   Widget build(BuildContext context) {
     return EasyRefresh.builder(
       onLoad: () {
-        ChatController.getMore(tabController.index);
+        chatController.getMore(tabController.index);
       },
       footer: footerLoading,
-      controller: ChatController.easyRefreshController,
+      controller: chatController.easyRefreshController,
       childBuilder: (context, physics) {
         return ScrollConfiguration(
           behavior: const ERScrollBehavior(),

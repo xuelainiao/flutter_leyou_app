@@ -4,6 +4,7 @@ import 'package:dio/dio.dart' as dio;
 import "dart:io";
 import "package:mall_community/utils/request/dio.dart";
 import "package:mall_community/utils/toast/toast.dart";
+import "package:mall_community/utils/tx_cos/tx_cos.dart";
 
 ApiClient apiClient = ApiClient();
 
@@ -47,25 +48,41 @@ class ImagePicker {
 }
 
 /// 选择相册并且上传到服务器返回在线地址
-Future<List> selectImguploadFile() async {
+Future<List<String>> selectImguploadFile() async {
   try {
     ToastUtils.showLoad();
     List<Media>? list = await ImagePicker.pickImages();
     if (list == null) return [];
-    List<dio.MultipartFile> files = [];
+    List<String> files = [];
     for (var item in list) {
-      var file = dio.MultipartFile.fromFileSync(
-        item.path,
-        filename: item.path.split("/").last,
-      );
-      files.add(file);
+      String cosUrl = await UploadDio.upload(item.path);
+      files.add(cosUrl);
     }
-    var result = await apiClient.uploadFile(files);
-    return result.data['list'];
+    return files;
   } catch (e) {
     debugPrint('选择图片上传失败 $e');
     ToastUtils.showToast('图片上传失败');
     return [];
+  } finally {
+    ToastUtils.hideLoad();
+  }
+}
+
+/// 选择单个视频上传到服务返回在线地址
+Future<Map?> selectVideouploadFile() async {
+  try {
+    List<Media>? list = await ImagePicker.pickVideo();
+    if (list == null) return null;
+    ToastUtils.showLoad();
+    Map cosResult = {};
+    if (list[0].thumbPath != null) {
+      String cosUrl = await UploadDio.upload(list[0].path);
+      String coverUrl = await UploadDio.upload(list[0].thumbPath!);
+      cosResult = {"cover": coverUrl, "url": cosUrl};
+    }
+    return cosResult;
+  } catch (e) {
+    return null;
   } finally {
     ToastUtils.hideLoad();
   }
@@ -78,19 +95,13 @@ Future<Map?> taskPhone(String type) async {
     List<Media>? list = await ImagePicker.takePhotos(type);
     if (list == null) return null;
     ToastUtils.showLoad();
-    List<dio.MultipartFile> files = [];
-    files.add(dio.MultipartFile.fromFileSync(
-      list[0].path,
-      filename: list[0].path.split("/").last,
-    ));
+    Map cosResult = {};
     if (list[0].thumbPath != null) {
-      files.add(dio.MultipartFile.fromFileSync(
-        list[0].thumbPath!,
-        filename: list[0].thumbPath!.split("/").last,
-      ));
+      String cosUrl = await UploadDio.upload(list[0].path);
+      String coverUrl = await UploadDio.upload(list[0].thumbPath!);
+      cosResult = {"cover": coverUrl, "url": cosUrl};
     }
-    var result = await apiClient.uploadFile(files, type: 'video');
-    return result.data;
+    return cosResult;
   } catch (e) {
     return null;
   } finally {

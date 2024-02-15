@@ -12,16 +12,14 @@ void main() async {
 }
 
 init() async {
-  /// 确保初始化完成
   WidgetsFlutterBinding.ensureInitialized();
-
+  // 存储
   await GetStorage.init();
-
   // 隐私政策
   AppConfig.privacyStatementHasAgree =
       Storage().read('privacyStatementHasAgree') ?? false;
+  // 用户信息
   UserInfo.token = Storage().read('token') ?? '';
-
   // 地图设值
   AMapFlutterLocation.setApiKey(
     AppConfig.amapAndroidKey,

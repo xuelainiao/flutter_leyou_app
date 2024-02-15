@@ -13,7 +13,7 @@ class TextSpanEmoji extends StatelessWidget {
   });
   final String text;
   final TextStyle style;
-  final Function(SelectedContent?)? onSelectionChanged;
+  final Function(SelectedContent?, FocusNode)? onSelectionChanged;
 
   final RegExp emojiRegex = RegExp(r'\[[^\]]+\]');
   final FocusNode focusNode = FocusNode();
@@ -21,12 +21,12 @@ class TextSpanEmoji extends StatelessWidget {
   SelectedContent? selectedContent;
 
   /// 取消选择
-  closeSlect() {
+  void closeSlect() {
     focusNode.unfocus();
   }
 
   ///全选
-  selectAll() {
+  void selectAll() {
     state?.selectAll();
   }
 
@@ -47,11 +47,16 @@ class TextSpanEmoji extends StatelessWidget {
       focusNode: focusNode,
       contextMenuBuilder: (context, SelectableRegionState regionState) {
         state = regionState;
+        if (onSelectionChanged == null) {
+          return AdaptiveTextSelectionToolbar.selectableRegion(
+            selectableRegionState: regionState,
+          );
+        }
         return const SizedBox();
       },
       onSelectionChanged: (SelectedContent? select) {
         selectedContent = select;
-        onSelectionChanged?.call(select);
+        onSelectionChanged?.call(select, focusNode);
       },
       child: Text.rich(
         TextSpan(

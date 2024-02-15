@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/automatic_keep_alive/automatic_keep_alive.dart';
-import 'package:mall_community/components/Avatar/Avatar.dart';
+import 'package:mall_community/components/avatar/avatar.dart';
 import 'package:mall_community/components/Loading/Loading.dart';
 import 'package:mall_community/pages/home/msg_list_page/module/msg_list_module.dart';
 

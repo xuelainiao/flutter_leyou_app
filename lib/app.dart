@@ -65,12 +65,3 @@ class _MyappState extends State<MyApp> {
     );
   }
 }
-
-// List<Locale> an = [
-//   const Locale('zh', 'CN'),
-//   const Locale('en', 'US'),
-// ];
-// List<Locale> ios = [
-//   const Locale('en', 'US'),
-//   const Locale('zh', 'CN'),
-// ];

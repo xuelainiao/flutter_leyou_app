@@ -9,7 +9,7 @@ import 'package:mall_community/components/avatar/avatar.dart';
 import 'package:mall_community/components/loading/loading.dart';
 import 'package:mall_community/modules/user_module.dart';
 import 'package:mall_community/pages/home/msg_list_page/module/msg_list_module.dart';
-import 'package:mall_community/utils/time.dart';
+import 'package:mall_community/utils/time_util.dart';
 
 ///好友消息列表
 class FirendMsgList extends StatelessWidget {

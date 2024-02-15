@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/modules/user_module.dart';
 import 'package:mall_community/pages/chat/api/msg.dart';
 import 'package:mall_community/pages/chat/dto/message_dto.dart';
-import 'package:mall_community/utils/socket/event.dart';
+import 'package:mall_community/utils/socket/socket_event.dart';
 import 'package:mall_community/utils/socket/socket.dart';
 
 /// 前端自己维护的消息状态
@@ -21,22 +22,29 @@ enum CustomMsgStatus {
 }
 
 class ChatController extends GetxController {
+  ScrollController scrollControll = ScrollController();
   // 工具栏key
   UniqueKey toolBarKey = UniqueKey();
   // 发送框聚焦
   FocusNode textFocusNode = FocusNode();
-  // 文本聚焦
+  // 文本选择聚焦
   FocusNode textSelectFocusNode = FocusNode();
   // socket
   late SocketManager socket;
   // 标题
   final title = ''.obs;
+  // 是否处于底部
+  RxBool isBottom = true.obs;
+  // 消息是否超出一屏
+  RxBool listRxceed = false.obs;
 
-  /// 消息列表
+  // 历史消息
   final msgHistoryList = [].obs;
   var params = {};
   int total = 0;
   final loading = false.obs;
+
+  /// 获取历史消息
   getHistoryMsg() async {
     try {
       params['page'] += 1;
@@ -46,11 +54,7 @@ class ChatController extends GetxController {
       if (result.data['list'].length > 0) {
         List list =
             result.data['list'].map((item) => SendMsgDto(item)).toList();
-        if (params['page'] == 1) {
-          newMsgList.addAll(list.reversed);
-        } else {
-          msgHistoryList.addAll(list.reversed);
-        }
+        msgHistoryList.addAll(list);
       }
       loading.value = false;
     } finally {
@@ -59,15 +63,15 @@ class ChatController extends GetxController {
     }
   }
 
-  ScrollController scrollControll = ScrollController();
-
   // 新消息数组
   final newMsgList = [].obs;
+  // 新消息数量
+  RxInt newMsgNums = 0.obs;
   // 引用消息回复消息
   Rx<SendMsgDto?> quoteMsg = Rx<SendMsgDto?>(null);
 
   /// 发送消息
-  sendMsg(String msg, {String type = 'text'}) {
+  void sendMsg(String msg, {String type = 'text'}) {
     Map msgData = {
       'content': msg,
       'userId': UserInfo.info['userId'],
@@ -77,8 +81,21 @@ class ChatController extends GetxController {
     var data = SendMsgDto(msgData, quote: quoteMsg.value);
     data.status = CustomMsgStatus.sending;
     socket.sendMessage(SocketEvent.friendMessage, data: data.toJson());
-    newMsgList.add(data);
-    toBottom();
+    addMsg(data);
+  }
+
+  /// 追加消息
+  void addMsg(SendMsgDto data) {
+    if (listRxceed.value) {
+      newMsgList.add(data);
+    } else {
+      newMsgList.insert(0, data);
+    }
+    if (isBottom.value) {
+      toBottom();
+    } else {
+      newMsgNums.value += 1;
+    }
   }
 
   /// 设置消息状态
@@ -107,8 +124,7 @@ class ChatController extends GetxController {
         data = SendMsgDto(result);
       }
       if (data.userId == params['userId']) {
-        newMsgList.add(data);
-        toBottom();
+        addMsg(data);
       } else {
         setMsgStatus(CustomMsgStatus.success, data.time);
       }
@@ -116,54 +132,92 @@ class ChatController extends GetxController {
     // 消息撤回
   }
 
-  closeEvent() {
+  void closeEvent() {
     socket.unSubscribe(SocketEvent.joinFriendSocket);
     socket.unSubscribe(SocketEvent.friendMessage);
   }
 
   ///是否是自己
-  isMy(String userId) {
+  bool isMy(String userId) {
     return userId == UserInfo.user['userId'];
   }
 
-  /// 是否处于底部
-  double extentAfter = 0.0;
-
   /// 滚动到底部
-  toBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      double height = scrollControll.position.maxScrollExtent;
+  void toBottom({bool isNext = true}) {
+    if (isNext) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        double height = scrollControll.position.minScrollExtent;
+        scrollControll.animateTo(
+          height,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      });
+    } else {
+      double height = scrollControll.position.minScrollExtent;
       scrollControll.animateTo(
         height,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.linearToEaseOut,
       );
-    });
+    }
   }
 
   /// 键盘检测
   late StreamSubscription<bool> keyboardSubscription;
 
+  GlobalKey key2 = GlobalKey();
+
+  /// 消息列表超出屏幕检测
+  checkListExceed() {
+    double extentTotal = scrollControll.position.extentTotal;
+    double extentInside = scrollControll.position.extentInside;
+    if (extentTotal > extentInside && !listRxceed.value) {
+      listRxceed.value = true;
+      if (kDebugMode) {
+        print('超出范围');
+      }
+    } else {
+      listRxceed.value = false;
+    }
+  }
+
+  /// 列表滚动监听
+  _scrollListener() {
+    double extentAfter = scrollControll.position.extentAfter;
+    double extentBefore = scrollControll.position.extentBefore;
+    if (extentAfter == 0) {
+      if (!loading.value && params['page'] >= 1) {
+        getHistoryMsg();
+      }
+    }
+    if (extentBefore > 800 && isBottom.value) {
+      isBottom.value = false;
+    }
+    if (extentBefore == 0 && !isBottom.value) {
+      isBottom.value = true;
+    }
+    // checkListExceed();
+  }
+
   @override
   void onInit() async {
     super.onInit();
+    scrollControll.addListener(_scrollListener);
     params = Get.arguments;
     params['friendId'] = params['userId'];
     params['pageSize'] = 15;
     params['page'] = 0;
     title.value = params['userName'];
     socket = SocketManager(token: UserInfo.token);
-    socket.sendMessage(
-      SocketEvent.joinFriendSocket,
-      data: {'friendId': params['friendId']},
-    );
-    // edbcba00-866f-4b3d-a7e5-e03ac352cab2
+    socket.addRoom(params['friendId']);
     initEvent();
     await getHistoryMsg();
   }
 
   @override
   void onClose() {
+    scrollControll.removeListener(_scrollListener);
     closeEvent();
     super.onClose();
   }

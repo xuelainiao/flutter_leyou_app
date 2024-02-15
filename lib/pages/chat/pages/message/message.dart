@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/common/theme.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
-import 'package:mall_community/pages/chat/pages/message/components/bottom_input.dart';
+import 'package:mall_community/pages/chat/pages/message/components/bottom_input/bottom_input.dart';
 import 'package:mall_community/pages/chat/pages/message/components/list.dart';
+import 'package:mall_community/pages/chat/pages/message/components/to_bottom_pop.dart';
 
 ///好友聊天页面
 class MessageListPage extends StatelessWidget {
@@ -35,7 +36,12 @@ class MessageListPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
-          const MessageList(),
+           Expanded(
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [const MessageList(), ToBottomPop()],
+            ),
+          ),
           MsgBotInput(key: MsgBotInputModule.bottomKey),
         ],
       ),

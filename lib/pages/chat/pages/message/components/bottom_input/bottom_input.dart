@@ -11,10 +11,10 @@ import 'package:mall_community/components/emoji_icon/icon_svg.dart';
 import 'package:mall_community/components/text_field_custom/field_custom.dart';
 import 'package:mall_community/components/text_field_custom/custom_field_module.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
-import 'package:mall_community/pages/chat/pages/message/components/bottom_menu.dart';
+import 'package:mall_community/pages/chat/pages/message/components/bottom_input/bottom_menu.dart';
 import 'package:mall_community/mixn/key_board_visible_mixn.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/quote_pop.dart';
-import 'package:mall_community/pages/chat/pages/message/components/sound_input.dart';
+import 'package:mall_community/pages/chat/pages/message/components/bottom_input/sound_input.dart';
 
 /// 页面底部菜单切换类型
 enum MenuTypes { hide, more, emoji }
@@ -29,7 +29,6 @@ class MsgBotInput extends StatefulWidget {
 
 class _MsgBotInputState extends State<MsgBotInput>
     with WidgetsBindingObserver, KeyboardVisibilityMixin {
-  late String tx = '';
   final ChatController chatController = Get.find();
   bool showkeyBoard = false;
   double baseHeight = 60.h;
@@ -49,7 +48,7 @@ class _MsgBotInputState extends State<MsgBotInput>
       WidgetsBinding.instance.addPostFrameCallback((_) {
         animatedDuration = 300;
         double inputHeight = MsgBotInputModule.getInputHeight();
-        double keyHeight = keyboardHeight + 30.h + inputHeight;
+        double keyHeight = keyboardHeight + 36.h + inputHeight;
         if (keyHeight != bottomHeight) {
           setState(() {
             bottomHeight = keyHeight;
@@ -95,7 +94,7 @@ class _MsgBotInputState extends State<MsgBotInput>
   /// 监听窗口高度变化设置高度
   setHeight() {
     keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    double height = baseHeight + keyboardHeight + 10.h;
+    double height = baseHeight + keyboardHeight;
     animatedDuration = 0;
     menuType = MenuTypes.hide;
 
@@ -142,7 +141,7 @@ class _MsgBotInputState extends State<MsgBotInput>
                       setInputType: setInputType),
               if (menuType == MenuTypes.more) ChatBottomMenu(),
               if (menuType == MenuTypes.emoji)
-                EmojiList(message: tx, setText: setMessage)
+                EmojiList(message: message, setText: setMessage)
             ],
           ),
         ),

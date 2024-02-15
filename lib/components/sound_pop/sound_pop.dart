@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
-import 'package:mall_community/pages/chat/pages/message/components/waveforms.dart';
+import 'package:mall_community/pages/chat/pages/message/components/bottom_input/waveforms.dart';
 
 /// 录音遮罩弹窗
 class SoundPop extends StatelessWidget {

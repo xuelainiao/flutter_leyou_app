@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/text_span/text_span.dart';
 import 'package:mall_community/pages/chat/dto/message_dto.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/message_box.dart';
+import 'package:mall_community/utils/time_util.dart';
 
 /// 消息回复
 class ReplyMsg extends StatelessWidget {
@@ -38,25 +37,36 @@ class ReplyMsg extends StatelessWidget {
             color: isMy ? HexThemColor(primaryColor) : Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: TextSpanEmoji(
-            text: quoteMsg.content,
-            style: tx14.copyWith(
-              color: isMy ? Colors.white : Colors.black87,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                decoration: BoxDecoration(
+                  color: isMy ? Colors.white : HexThemColor(placeholderTextC),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      TimeUtil.formatTimeRecently(quoteMsg.quote.time),
+                      style: tx12,
+                    ),
+                    replyTheOriginal(quoteMsg.quote)
+                  ],
+                ),
+              ),
+              const SizedBox(height: 4),
+              TextSpanEmoji(
+                text: quoteMsg.content,
+                style: tx14.copyWith(
+                  color: isMy ? Colors.white : Colors.black87,
+                ),
+              ),
+            ],
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: HexThemColor(cCcc),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          constraints: BoxConstraints(
-            maxWidth: 0.6.sw,
-          ),
-          child: replyTheOriginal(quoteMsg.quote),
-        )
       ],
     );
   }
@@ -66,9 +76,7 @@ class ReplyMsg extends StatelessWidget {
     if (quote.messageType == MessageType.text) {
       return TextSpanEmoji(
         text: quote.content,
-        style: tx14.copyWith(
-          color: isMy ? Colors.white : Colors.black87,
-        ),
+        style: tx14,
       );
     } else {
       return MsgTypeWidget(

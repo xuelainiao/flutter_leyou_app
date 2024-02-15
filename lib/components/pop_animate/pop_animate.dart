@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 
 class PopAnimate extends StatefulWidget {
   final Widget child;
+  final Duration duration;
+  final Alignment alignment;
 
-  const PopAnimate({Key? key, required this.child}) : super(key: key);
+  const PopAnimate({
+    Key? key,
+    required this.child,
+    this.duration = const Duration(milliseconds: 300),
+    this.alignment = Alignment.topCenter,
+  }) : super(key: key);
 
   @override
   State<PopAnimate> createState() => _PopAnimateState();
@@ -19,9 +26,9 @@ class _PopAnimateState extends State<PopAnimate>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: widget.duration,
     );
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeOutCubic,
@@ -40,6 +47,7 @@ class _PopAnimateState extends State<PopAnimate>
   Widget build(BuildContext context) {
     return ScaleTransition(
       scale: _scaleAnimation,
+      alignment: widget.alignment,
       child: widget.child,
     );
   }

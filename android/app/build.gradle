@@ -80,6 +80,4 @@ flutter {
 dependencies {
      //定位功能
     implementation 'com.amap.api:3dmap:latest.integration'
-    //搜索功能
-    implementation 'com.amap.api:search:latest.integration'
 }
