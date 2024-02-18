@@ -1,6 +1,8 @@
 import 'dart:ffi';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
@@ -61,18 +63,30 @@ class _MessageListState extends State<MessageList> {
         _listClick();
       },
       child: Container(
+        key: chatController.listKey,
         color: AppTheme.mode == ThemeMode.dark ? null : cF1f1f1,
         padding: EdgeInsets.symmetric(horizontal: 14.w),
         alignment: Alignment.topCenter,
         child: Obx(
           () => CustomScrollView(
-            reverse: true,
-            anchor: 0,
             controller: chatController.scrollControll,
-            center: chatController.listRxceed.value ? centerKey : null,
-            shrinkWrap: chatController.listRxceed.value ? false : true,
-            physics: const ClampingScrollPhysics(),
+            center: centerKey,
+            cacheExtent: 1.5.sh,
+            anchor: chatController.offSet.value > 1
+                ? 1
+                : chatController.offSet.value,
             slivers: [
+              if (chatController.loading.value)
+                const SliverToBoxAdapter(child: LoadingText()),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, i) {
+                    return buildItem(chatController.msgHistoryList[i], i: i);
+                  },
+                  childCount: chatController.msgHistoryList.length,
+                ),
+              ),
+              SliverPadding(padding: EdgeInsets.zero, key: centerKey),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, i) {
@@ -81,27 +95,6 @@ class _MessageListState extends State<MessageList> {
                   childCount: chatController.newMsgList.length,
                 ),
               ),
-              SliverPadding(padding: EdgeInsets.zero, key: centerKey),
-              SliverList(
-                key: chatController.key2,
-                delegate: SliverChildBuilderDelegate(
-                  (context, i) {
-                    return buildItem(chatController.msgHistoryList[i], i: i);
-                  },
-                  childCount: chatController.msgHistoryList.length,
-                ),
-              ),
-              Obx(() {
-                if (!chatController.loading.value) {
-                  return const SliverPadding(
-                    padding: EdgeInsets.all(0),
-                  );
-                } else {
-                  return const SliverToBoxAdapter(child: LoadingText());
-                }
-              }),
-              if (chatController.loading.value)
-                const SliverToBoxAdapter(child: LoadingText())
             ],
           ),
         ),
@@ -111,34 +104,11 @@ class _MessageListState extends State<MessageList> {
 
   Widget buildItem(SendMsgDto item, {int? i}) {
     bool isMy = chatController.isMy(item.userId);
-    // 这里监听第一个消息 是否超出屏幕 性能不用担心
-    if (i != null && i == chatController.msgHistoryList.length - 1) {
-      return VisibilityDetector(
-        key: visKey,
-        child: MessageBox(
-          isMy: isMy,
-          avatar:
-              isMy ? UserInfo.user['avatar'] : chatController.params['avatar'],
-          item: item,
-          toolBarKey: chatController.toolBarKey,
-        ),
-        onVisibilityChanged: (VisibilityInfo state) {
-          if (state.visibleFraction < 1) {
-            chatController.listRxceed.value = true;
-          }else {
-            chatController.listRxceed.value = false;
-
-          }
-        },
-      );
-    } else {
-      return MessageBox(
-        isMy: isMy,
-        avatar:
-            isMy ? UserInfo.user['avatar'] : chatController.params['avatar'],
-        item: item,
-        toolBarKey: chatController.toolBarKey,
-      );
-    }
+    return MessageBox(
+      isMy: isMy,
+      avatar: isMy ? UserInfo.user['avatar'] : chatController.params['avatar'],
+      item: item,
+      toolBarKey: chatController.toolBarKey,
+    );
   }
 }

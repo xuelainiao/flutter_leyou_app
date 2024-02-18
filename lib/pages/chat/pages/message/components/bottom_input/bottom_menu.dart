@@ -31,6 +31,10 @@ class ChatBottomMenu extends StatelessWidget {
       'title': '定位',
       'icon': const Icon(IconData(0xe620, fontFamily: 'micon'), size: 32),
     },
+    {
+      'title': '视频通话',
+      'icon': const Icon(IconData(0xe620, fontFamily: 'micon'), size: 32),
+    },
   ];
 
   itemClick(String name) {
@@ -50,20 +54,35 @@ class ChatBottomMenu extends StatelessWidget {
   }
 
   imageMsg() async {
-    List cosUrls = await selectImguploadFile();
-    if (cosUrls.isEmpty) return;
-    for (var item in cosUrls) {
-      chatController.sendMsg(
-        jsonEncode({'content': item}),
-        type: MessageType.image,
-      );
-    }
+    List<Map<String, dynamic>> list = [
+      {'title': '选择视频', 'type': 'video'},
+      {'title': '选择照片', 'type': 'image'}
+    ];
+    showBottomMenu(list, (item) async {
+      if (item['type'] == 'video') {
+        Map? result = await selectVideouploadFile();
+        if (result == null) return;
+        chatController.sendMsg(
+          jsonEncode({'content': result['url'], 'cover': result['cover']}),
+          type: MessageType.video,
+        );
+      } else {
+        List cosUrls = await selectImguploadFile();
+        if (cosUrls.isEmpty) return;
+        for (var item in cosUrls) {
+          chatController.sendMsg(
+            jsonEncode({'content': item}),
+            type: MessageType.image,
+          );
+        }
+      }
+    });
   }
 
   shoot() {
     List<Map<String, dynamic>> list = [
-      {'title': '选择视频', 'type': 'video'},
-      {'title': '选择照片', 'type': 'image'}
+      {'title': '拍摄视频', 'type': 'video'},
+      {'title': '拍摄照片', 'type': 'image'}
     ];
     showBottomMenu(list, (item) async {
       Map? result = await taskPhone(item['type']);
@@ -101,6 +120,8 @@ class ChatBottomMenu extends StatelessWidget {
       chatController.sendMsg(data, type: MessageType.location);
     }
   }
+
+  videoCall() async {}
 
   @override
   Widget build(BuildContext context) {

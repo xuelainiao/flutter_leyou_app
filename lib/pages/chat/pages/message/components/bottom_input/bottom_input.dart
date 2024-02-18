@@ -46,7 +46,7 @@ class _MsgBotInputState extends State<MsgBotInput>
     // 动态获取输入框高度
     if (showkeyBoard) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        animatedDuration = 300;
+        animatedDuration = 240;
         double inputHeight = MsgBotInputModule.getInputHeight();
         double keyHeight = keyboardHeight + 36.h + inputHeight;
         if (keyHeight != bottomHeight) {
@@ -75,7 +75,7 @@ class _MsgBotInputState extends State<MsgBotInput>
   /// 菜单类型 0不显示 1菜单 2表情
   MenuTypes menuType = MenuTypes.hide;
   setMenuType(MenuTypes type) {
-    animatedDuration = 300;
+    animatedDuration = 200;
     if (type == menuType || type == MenuTypes.hide) {
       setState(() {
         menuType = MenuTypes.hide;
@@ -101,9 +101,7 @@ class _MsgBotInputState extends State<MsgBotInput>
     /// 如果当前底部高度 > 键盘高度 就不设置
     /// 如果发现动态切换键盘高度变小了的话 就要去掉这里
     if (bottomHeight > height) return;
-    setState(() {
-      bottomHeight = height;
-    });
+    bottomHeight = height;
   }
 
   @override
@@ -113,7 +111,7 @@ class _MsgBotInputState extends State<MsgBotInput>
         QuotePop(),
         AnimatedContainer(
           duration: Duration(milliseconds: animatedDuration),
-          curve: Curves.easeIn,
+          curve: Curves.easeInOut,
           height: bottomHeight,
           padding: EdgeInsets.only(bottom: ScreenUtil().bottomBarHeight),
           onEnd: () {

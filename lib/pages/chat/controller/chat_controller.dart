@@ -2,12 +2,14 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/modules/user_module.dart';
 import 'package:mall_community/pages/chat/api/msg.dart';
 import 'package:mall_community/pages/chat/dto/message_dto.dart';
 import 'package:mall_community/utils/socket/socket_event.dart';
 import 'package:mall_community/utils/socket/socket.dart';
+import 'package:mall_community/utils/utils.dart';
 
 /// 前端自己维护的消息状态
 enum CustomMsgStatus {
@@ -86,11 +88,7 @@ class ChatController extends GetxController {
 
   /// 追加消息
   void addMsg(SendMsgDto data) {
-    if (listRxceed.value) {
-      newMsgList.add(data);
-    } else {
-      newMsgList.insert(0, data);
-    }
+    newMsgList.add(data);
     if (isBottom.value) {
       toBottom();
     } else {
@@ -146,7 +144,7 @@ class ChatController extends GetxController {
   void toBottom({bool isNext = true}) {
     if (isNext) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        double height = scrollControll.position.minScrollExtent;
+        double height = scrollControll.position.maxScrollExtent;
         scrollControll.animateTo(
           height,
           duration: const Duration(milliseconds: 200),
@@ -154,7 +152,7 @@ class ChatController extends GetxController {
         );
       });
     } else {
-      double height = scrollControll.position.minScrollExtent;
+      double height = scrollControll.position.maxScrollExtent;
       scrollControll.animateTo(
         height,
         duration: const Duration(milliseconds: 300),
@@ -168,36 +166,32 @@ class ChatController extends GetxController {
 
   GlobalKey key2 = GlobalKey();
 
+  RxDouble offSet = 0.0.obs;
+  GlobalKey listKey = GlobalKey();
+
   /// 消息列表超出屏幕检测
   checkListExceed() {
     double extentTotal = scrollControll.position.extentTotal;
     double extentInside = scrollControll.position.extentInside;
-    if (extentTotal > extentInside && !listRxceed.value) {
-      listRxceed.value = true;
-      if (kDebugMode) {
-        print('超出范围');
-      }
-    } else {
-      listRxceed.value = false;
-    }
+    offSet.value =(scrollControll.position.extentBefore) /  extentInside;
   }
 
   /// 列表滚动监听
   _scrollListener() {
     double extentAfter = scrollControll.position.extentAfter;
     double extentBefore = scrollControll.position.extentBefore;
-    if (extentAfter == 0) {
+    if (extentBefore == 0) {
       if (!loading.value && params['page'] >= 1) {
         getHistoryMsg();
       }
     }
-    if (extentBefore > 800 && isBottom.value) {
+    if (extentAfter > 800 && isBottom.value) {
       isBottom.value = false;
     }
-    if (extentBefore == 0 && !isBottom.value) {
+    if (extentBefore >= scrollControll.position.maxScrollExtent &&
+        !isBottom.value) {
       isBottom.value = true;
     }
-    // checkListExceed();
   }
 
   @override

@@ -57,7 +57,7 @@ class _MyappState extends State<MyApp> {
           themeMode: AppTheme.mode,
           darkTheme: AppTheme.darkTheme,
           builder: EasyLoading.init(),
-          defaultTransition: Transition.rightToLeft,
+          defaultTransition: Transition.rightToLeftWithFade,
           supportedLocales: localization.supportedLocales,
           localizationsDelegates: localization.localizationsDelegates,
         );
