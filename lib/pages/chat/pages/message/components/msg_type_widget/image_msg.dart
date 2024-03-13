@@ -18,9 +18,8 @@ class ImageMsg extends StatelessWidget {
   final UniqueKey uniqueKey = UniqueKey();
 
   tap(url) async {
-    final ChatController chatController = Get.find();
-    await chatController.previewImage(url);
-    // chatController = null;
+    ChatController chatC = Get.find();
+    await chatC.previewImage(url);
   }
 
   @override

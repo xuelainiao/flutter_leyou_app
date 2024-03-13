@@ -36,9 +36,6 @@ class _PreviewImage2State extends State<PreviewImage> {
         widget.onLongPressDown?.call(data);
         switch (data['title']) {
           case '保存到相册':
-            // savePhoneAlbum([
-            //   pics[currentIndex],
-            // ]);
             break;
           default:
         }
@@ -67,6 +64,8 @@ class _PreviewImage2State extends State<PreviewImage> {
                   mode: ExtendedImageMode.gesture,
                 ),
               );
+
+              /// 这里是全部Hero 还是当前点击的图片Hero 开发者自行决定
               return Hero(
                 tag: widget.pics[index]['key'],
                 child: image,
