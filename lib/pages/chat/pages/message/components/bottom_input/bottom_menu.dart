@@ -58,7 +58,8 @@ class ChatBottomMenu extends StatelessWidget {
       {'title': '选择视频', 'type': 'video'},
       {'title': '选择照片', 'type': 'image'}
     ];
-    showBottomMenu(list, (item) async {
+    showBottomMenu(list, (Map? item) async {
+      if (item == null) return;
       if (item['type'] == 'video') {
         Map? result = await selectVideouploadFile();
         if (result == null) return;
@@ -84,7 +85,8 @@ class ChatBottomMenu extends StatelessWidget {
       {'title': '拍摄视频', 'type': 'video'},
       {'title': '拍摄照片', 'type': 'image'}
     ];
-    showBottomMenu(list, (item) async {
+    showBottomMenu(list, (Map? item) async {
+      if (item == null) return;
       Map? result = await taskPhone(item['type']);
       if (result == null) return;
       chatController.sendMsg(

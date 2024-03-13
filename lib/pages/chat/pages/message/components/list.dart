@@ -1,8 +1,4 @@
-import 'dart:ffi';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
@@ -14,7 +10,6 @@ import 'package:mall_community/pages/chat/controller/chat_controller.dart';
 import 'package:mall_community/pages/chat/pages/message/components/bottom_input/bottom_input.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/message_box.dart';
 import 'package:mall_community/utils/overlay_manager/overlay_manager.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 ///好友聊天消息列表
 class MessageList extends StatefulWidget {

@@ -3,7 +3,6 @@ import 'package:mall_community/pages/chat/pages/message/message.dart';
 import 'package:mall_community/pages/home/home_table.dart';
 import 'package:mall_community/pages/login/login.dart';
 import 'package:mall_community/pages/map_search/map_search.dart';
-import 'package:mall_community/pages/preview_image/preview_image.dart';
 import 'package:mall_community/pages/privacy_statement/privacy_statement.dart';
 
 class AppPages {
@@ -19,15 +18,6 @@ class AppPages {
 
     // 好友模块
     GetPage(name: '/chat', page: () => MessageListPage()),
-
-    // 图片预览
-    GetPage(
-      name: '/previewImage',
-      page: () => const PreviewImage(),
-      opaque: false,
-      showCupertinoParallax: false,
-      transition: Transition.noTransition,
-    ),
 
     // 地图
     GetPage(name: '/map', page: () => const ShowMapPage()),

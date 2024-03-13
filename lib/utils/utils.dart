@@ -13,7 +13,7 @@ isProduction() {
 }
 
 /// 底部弹窗菜单选择
-showBottomMenu(List<Map<String, dynamic>> list, Function(dynamic) callback) {
+showBottomMenu(List<Map<String, dynamic>> list, Function(Map?) callback) {
   showModalBottomSheet(
     context: Get.context!,
     backgroundColor: Colors.transparent,
@@ -47,7 +47,7 @@ showBottomMenu(List<Map<String, dynamic>> list, Function(dynamic) callback) {
                 InkWell(
                   onTap: () {
                     Get.back();
-                    callback.call("");
+                    callback.call(null);
                   },
                   child: Container(
                     height: 55,

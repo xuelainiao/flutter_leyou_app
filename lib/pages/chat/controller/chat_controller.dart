@@ -1,15 +1,15 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:mall_community/components/drag_bottom_dismiss/drag_bottom_dismiss_dialog.dart';
 import 'package:mall_community/modules/user_module.dart';
 import 'package:mall_community/pages/chat/api/msg.dart';
 import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/preview_image/preview_image.dart';
 import 'package:mall_community/utils/socket/socket_event.dart';
 import 'package:mall_community/utils/socket/socket.dart';
-import 'package:mall_community/utils/utils.dart';
 
 /// 前端自己维护的消息状态
 enum CustomMsgStatus {
@@ -41,7 +41,7 @@ class ChatController extends GetxController {
   RxBool listRxceed = false.obs;
 
   // 历史消息
-  final msgHistoryList = [].obs;
+  RxList<SendMsgDto> msgHistoryList = <SendMsgDto>[].obs;
   var params = {};
   int total = 0;
   final loading = false.obs;
@@ -54,8 +54,10 @@ class ChatController extends GetxController {
       var result = await reqMessages(params);
       total = result.data['total'];
       if (result.data['list'].length > 0) {
-        List list =
-            result.data['list'].map((item) => SendMsgDto(item)).toList();
+        List<SendMsgDto> list = [];
+        result.data['list'].forEach((item) {
+          list.add(SendMsgDto(item));
+        });
         msgHistoryList.addAll(list);
       }
       loading.value = false;
@@ -66,7 +68,7 @@ class ChatController extends GetxController {
   }
 
   // 新消息数组
-  final newMsgList = [].obs;
+  RxList<SendMsgDto> newMsgList = <SendMsgDto>[].obs;
   // 新消息数量
   RxInt newMsgNums = 0.obs;
   // 引用消息回复消息
@@ -110,6 +112,34 @@ class ChatController extends GetxController {
   showInput() {
     SystemChannels.textInput.invokeMethod("TextInput.show");
     textFocusNode.requestFocus();
+  }
+
+  /// 预览图片
+  previewImage(url) async {
+    List<Map<String, dynamic>> imgs = [];
+    List<SendMsgDto> msgList = [...newMsgList, ...msgHistoryList];
+    for (var i = 0; i < msgList.length; i++) {
+      var item = msgList[i];
+      if (item.messageType == MessageType.image) {
+        FileMsgInfo fileMsgInfo = FileMsgInfo(jsonDecode(item.content));
+        imgs.add({
+          "url": fileMsgInfo.content,
+          'key': "key_${item.time}",
+        });
+      }
+    }
+    int inx = imgs.indexWhere((item) => item['url'] == url);
+    await Navigator.push(
+      Get.context!,
+      DragBottomDismissDialog(
+        builder: (context) {
+          return PreviewImage(
+            pics: imgs,
+            current: inx == -1 ? 0 : inx,
+          );
+        },
+      ),
+    );
   }
 
   initEvent() {
@@ -173,7 +203,7 @@ class ChatController extends GetxController {
   checkListExceed() {
     double extentTotal = scrollControll.position.extentTotal;
     double extentInside = scrollControll.position.extentInside;
-    offSet.value =(scrollControll.position.extentBefore) /  extentInside;
+    offSet.value = (scrollControll.position.extentBefore) / extentInside;
   }
 
   /// 列表滚动监听
@@ -185,11 +215,11 @@ class ChatController extends GetxController {
         getHistoryMsg();
       }
     }
+
     if (extentAfter > 800 && isBottom.value) {
       isBottom.value = false;
     }
-    if (extentBefore >= scrollControll.position.maxScrollExtent &&
-        !isBottom.value) {
+    if (extentAfter <= 0 && !isBottom.value) {
       isBottom.value = true;
     }
   }

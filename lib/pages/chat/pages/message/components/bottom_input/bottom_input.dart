@@ -17,7 +17,11 @@ import 'package:mall_community/pages/chat/pages/message/components/msg_type_widg
 import 'package:mall_community/pages/chat/pages/message/components/bottom_input/sound_input.dart';
 
 /// 页面底部菜单切换类型
-enum MenuTypes { hide, more, emoji }
+/// hide 关闭菜单
+/// more 更多
+/// emjoi 表情
+/// key 切换到键盘关闭菜单
+enum MenuTypes { hide, more, emoji, key }
 
 /// 聊天页面底部输入框
 class MsgBotInput extends StatefulWidget {
@@ -75,6 +79,10 @@ class _MsgBotInputState extends State<MsgBotInput>
   /// 菜单类型 0不显示 1菜单 2表情
   MenuTypes menuType = MenuTypes.hide;
   setMenuType(MenuTypes type) {
+    if (type == MenuTypes.key) {
+      chatController.textFocusNode.requestFocus();
+      return;
+    }
     animatedDuration = 200;
     if (type == menuType || type == MenuTypes.hide) {
       setState(() {
@@ -91,7 +99,7 @@ class _MsgBotInputState extends State<MsgBotInput>
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
-  /// 监听窗口高度变化设置高度
+  // 监听窗口高度变化设置高度
   setHeight() {
     keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     double height = baseHeight + keyboardHeight;
@@ -233,11 +241,8 @@ class _MsgInputState extends State<MsgInput> {
   }
 
   setType(showKeyIcon) {
-    widget.setMenuType(showKeyIcon ? MenuTypes.hide : MenuTypes.emoji);
-    if (showKeyIcon) {
-      SystemChannels.textInput.invokeMethod("TextInput.show");
-      widget.chatController.textFocusNode.requestFocus();
-    } else {
+    widget.setMenuType(showKeyIcon ? MenuTypes.key : MenuTypes.emoji);
+    if (!showKeyIcon) {
       SystemChannels.textInput.invokeMethod("TextInput.hide");
     }
   }

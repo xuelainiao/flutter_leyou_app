@@ -4,8 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './drag_bottom_pop_sheet.dart';
 
-
-/// 通过路由方式打开
+/// 可拖拽关闭的路由
 class DragBottomDismissDialog<T> extends PageRoute<T>
     with CupertinoRouteTransitionMixin {
   DragBottomDismissDialog({

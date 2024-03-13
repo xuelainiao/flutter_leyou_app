@@ -18,7 +18,6 @@ class AppFilePicker {
 
   /// 选择单个文件并且上传到服务器返回在线地址
   static Future<FileMsgInfo?> selectFileuploadFile() async {
-    ApiClient apiClient = ApiClient();
     FilePickerResult? result = await pickFile();
     if (result == null) return null;
 
