@@ -6,9 +6,11 @@ import 'package:mall_community/pages/chat/pages/message/components/bottom_input/
 
 /// 录音遮罩弹窗
 class SoundPop extends StatelessWidget {
-  const SoundPop({super.key, required this.isCancel});
+  const SoundPop({super.key, required this.isCancel, required this.second});
 
   final RxBool isCancel;
+
+  final RxInt second;
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +67,12 @@ class SoundPop extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(child: WaveformsList()),
-                      const SizedBox(
+                      SizedBox(
                         width: 40,
-                        child: Text("50"),
+                        child: Obx(() => Text(
+                              "${second.value}",
+                              style: const TextStyle(color: Colors.white),
+                            )),
                       ),
                     ],
                   )),

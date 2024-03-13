@@ -29,22 +29,29 @@ class SoundInput extends StatefulWidget {
 
 class _SoundInputState extends State<SoundInput> {
   double dy = 0;
-  final isCancel = false.obs;
   UniqueKey key = UniqueKey();
   OverlayEntry? overlayEntry;
   WaveformsModule? waveformsModule;
 
-  RxList<int> waveforms = RxList([1, 20, 30, 31, 65, 90]);
+  // 是否取消
+  final isCancel = false.obs;
+  // 录音秒数
+  final RxInt second = 0.obs;
 
   /// 显示录音widget 并且开始录音
   startSound() {
-    OverlayManager().showOverlay(SoundPop(isCancel: isCancel), key);
+    OverlayManager().showOverlay(
+      SoundPop(isCancel: isCancel, second: second),
+      key,
+      isAnimate: false,
+    );
     Timer(const Duration(seconds: 1), () {
       waveformsModule = Get.find<WaveformsModule>();
     });
     SoundRecording().startRecording((e, err, state) {
       if (state == PlayerStatus.run && e != null) {
         waveformsModule?.add(e.decibels ?? 4);
+        second.value = e.duration.inSeconds;
       }
       if (state == PlayerStatus.error) {
         ToastUtils.showToast('录音失败$err');
@@ -65,6 +72,7 @@ class _SoundInputState extends State<SoundInput> {
       return;
     }
     isCancel.value = false;
+    second.value = 0;
     if (resuelt != null) {
       send(resuelt);
     }
@@ -87,6 +95,9 @@ class _SoundInputState extends State<SoundInput> {
   send(SoundResuelt? soundResuelt) async {
     // 先追加
     if (soundResuelt != null) {
+      if (soundResuelt.second <= 1) {
+        return ToastUtils.showToast('说话时间太短了', type: 'error');
+      }
       var data = SendMsgDto({
         'content': soundResuelt.toJson(),
         'userId': UserInfo.info['userId'],

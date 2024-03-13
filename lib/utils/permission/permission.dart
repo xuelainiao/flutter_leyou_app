@@ -2,7 +2,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// app权限
 class AppPermission {
-  /// 获取权限
+  /// 判断权限并且获取权限
   static Future<bool> getPermission(Permission permission) async {
     //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
     PermissionStatus status = await permission.status;
@@ -14,6 +14,12 @@ class AppPermission {
       return st == PermissionStatus.granted;
     }
     return false;
+  }
+
+  /// 判断权限是否存在
+  static Future<bool> hasPermission(Permission permission) async {
+    PermissionStatus status = await permission.status;
+    return status.isGranted;
   }
 
   /// 申请权限

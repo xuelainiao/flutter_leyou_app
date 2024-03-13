@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:mall_community/common/app_config.dart';
 import 'package:mall_community/components/button/button.dart';
 import 'package:mall_community/utils/location/location.dart';
+import 'package:mall_community/utils/location/location_module.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'address_poi_list.dart';
@@ -120,6 +121,11 @@ class _ShowMapPageState extends State<_ShowMapPageBody> {
       AampLocation.address?.latitude ?? 39.909187,
       AampLocation.address?.longitude ?? 116.397451,
     );
+    AampLocation().getLocation(callback: (LocationModule res) {
+      setState(() {
+        defaultLatLng = LatLng(res.latitude!, res.longitude!);
+      });
+    });
   }
 
   @override
@@ -194,7 +200,10 @@ class _ShowMapPageState extends State<_ShowMapPageBody> {
             ),
           ],
         ),
-        panel: AddressPoiList(setAddress: setAddress, latLng: defaultLatLng,),
+        panel: AddressPoiList(
+          setAddress: setAddress,
+          latLng: defaultLatLng,
+        ),
         boxShadow: null,
         color: Colors.transparent,
         backdropColor: Colors.transparent,

@@ -38,7 +38,7 @@ class SoundRecording {
     Duration duration = const Duration(seconds: 60),
   }) async {
     try {
-      bool perStatus = await AppPermission.getPermission(Permission.microphone);
+      bool perStatus = await AppPermission.hasPermission(Permission.microphone);
       if (perStatus) {
         Directory tempDir = await getTemporaryDirectory();
         String path = '${tempDir.path}/flutter_${ext[Codec.aacADTS.index]}';
@@ -72,15 +72,9 @@ class SoundRecording {
           stopRecording();
           callback(null, '已达到录音时长上限', PlayerStatus.arrivalTime);
         });
-        // // 即将达到录音时长上限提醒
-        // if (duration.inSeconds > 20) {
-        //   Timer(duration - const Duration(seconds: 5), () {
-        //     ToastUtils.showToast('即将达到录音时长上限');
-        //     callback(null, '即将到达录音时长上限', PlayerStatus.soonLimit);
-        //   });
-        // }
       } else {
         callback(null, "请允许APP获取麦克风权限", PlayerStatus.error);
+        await AppPermission.requestPermission(Permission.microphone);
       }
     } catch (e) {
       debugPrint("录音失败$e");
