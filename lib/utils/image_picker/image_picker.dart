@@ -108,3 +108,15 @@ Future<Map?> taskPhone(String type) async {
     ToastUtils.hideLoad();
   }
 }
+
+///下载网络图片保存到本地相册
+Future saveNetWorkImg(String url) async {
+  try {
+    ToastUtils.showLoad();
+    File file = await apiClient.downloadFile(url);
+    await ImagePicker.saveFile(file);
+    ToastUtils.showToast("保存成功");
+  } catch (e) {
+    ToastUtils.showToast("保存照片失败 请稍后再试");
+  }
+}

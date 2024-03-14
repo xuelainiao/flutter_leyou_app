@@ -1,7 +1,9 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mall_community/components/drag_bottom_dismiss/drag_bottom_pop_sheet.dart';
+import 'package:mall_community/utils/image_picker/image_picker.dart';
 import 'package:mall_community/utils/utils.dart';
 
 class PreviewImage extends StatefulWidget {
@@ -36,11 +38,18 @@ class _PreviewImage2State extends State<PreviewImage> {
         widget.onLongPressDown?.call(data);
         switch (data['title']) {
           case '保存到相册':
+            saveNetWorkImg(widget.pics[currentIndex]['url']);
             break;
           default:
         }
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.current;
   }
 
   @override
@@ -53,32 +62,34 @@ class _PreviewImage2State extends State<PreviewImage> {
             Navigator.pop(context);
           },
           onLongPress: onLongPressDown,
-          child: ExtendedImageGesturePageView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              Widget image = Container(
-                padding: const EdgeInsets.all(5.0),
-                child: ExtendedImage.network(
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).viewPadding.top,
+              bottom: MediaQuery.of(context).viewPadding.bottom,
+            ),
+            child: PageView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                Widget image = ExtendedImage.network(
                   widget.pics[index]['url'],
                   fit: BoxFit.contain,
-                  enableSlideOutPage: true,
-                  mode: ExtendedImageMode.gesture,
-                ),
-              );
+                  mode: ExtendedImageMode.none,
+                );
 
-              /// 这里是全部Hero 还是当前点击的图片Hero 开发者自行决定
-              return Hero(
-                tag: widget.pics[index]['key'],
-                child: image,
-              );
-            },
-            itemCount: widget.pics.length,
-            onPageChanged: (int index) {
-              currentIndex = index;
-            },
-            controller: ExtendedPageController(
-              initialPage: widget.current,
+                /// 这里是全部Hero 还是当前点击的图片Hero 开发者自行决定
+                return Hero(
+                  tag: widget.pics[index]['key'],
+                  child: image,
+                );
+              },
+              itemCount: widget.pics.length,
+              onPageChanged: (int index) {
+                currentIndex = index;
+              },
+              controller: PageController(
+                initialPage: widget.current,
+              ),
+              scrollDirection: Axis.horizontal,
             ),
-            scrollDirection: Axis.horizontal,
           ),
         ),
       ),

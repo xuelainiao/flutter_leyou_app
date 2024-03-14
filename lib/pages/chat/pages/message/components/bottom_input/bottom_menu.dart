@@ -33,7 +33,7 @@ class ChatBottomMenu extends StatelessWidget {
     },
     {
       'title': '视频通话',
-      'icon': const Icon(IconData(0xe620, fontFamily: 'micon'), size: 32),
+      'icon': const Icon(IconData(0xe689, fontFamily: 'micon'), size: 32),
     },
   ];
 
@@ -134,6 +134,7 @@ class ChatBottomMenu extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Wrap(
           spacing: 10,
+          runSpacing: 20,
           alignment: WrapAlignment.spaceBetween,
           clipBehavior: Clip.hardEdge,
           children: List.generate(menus.length, (i) => buildItem(menus[i])),

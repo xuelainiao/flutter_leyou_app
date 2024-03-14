@@ -70,7 +70,6 @@ class Tabs extends StatelessWidget implements PreferredSizeWidget {
         indicatorSize: TabBarIndicatorSize.label,
         isScrollable: isScrollable,
         labelStyle: labelStyle,
-        indicatorPadding: const EdgeInsets.symmetric(horizontal: 4),
         unselectedLabelStyle: unselectedLabelStyle,
         tabAlignment: align,
         indicator: indicator,

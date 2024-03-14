@@ -36,7 +36,6 @@ class LoginPage extends StatelessWidget {
           iconTheme: const IconThemeData(color: Colors.black),
         ),
         resizeToAvoidBottomInset: false,
-        // backgroundColor: HexThemColor(backgroundColor),
         body: SizedBox(
           height: 1.sh,
           width: 1.sw,

@@ -14,7 +14,7 @@
     <!-- Maps(地图) end -->
     
     <application
-        android:label="mall_community"
+        android:label="乐悠云社"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
          android:allowNativeHeapPointerTagging="false"
