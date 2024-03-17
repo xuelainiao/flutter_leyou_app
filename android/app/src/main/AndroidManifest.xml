@@ -5,22 +5,22 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!-- Maps - 高德地图 begin -->
+    
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 获取网络状态，根据网络状态切换进行数据请求网络转换 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- Maps(地图) end -->
     
     <application
         android:label="乐悠云社"
-        android:name="${applicationName}"
+        android:name="MyApplication"
         android:icon="@mipmap/ic_launcher"
          android:allowNativeHeapPointerTagging="false"
         >
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.mall_community.MapActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
@@ -45,6 +45,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <service android:name="com.amap.api.location.APSService" />
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="vpb7aVpQ2gb6trP1gxzpt9DUrgmXzXcv" />
     </application>
 </manifest>

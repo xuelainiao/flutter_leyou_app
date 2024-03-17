@@ -1,15 +1,12 @@
 PODS:
-  - AMap3DMap (9.7.0):
-    - AMapFoundation (>= 1.8.0)
-  - amap_flutter_location (0.0.1):
-    - AMapLocation
-    - Flutter
-  - amap_flutter_map (0.0.1):
-    - AMap3DMap
-    - Flutter
-  - AMapFoundation (1.8.2)
-  - AMapLocation (2.10.0):
-    - AMapFoundation (>= 1.8.0)
+  - BaiduMapKit/Base (6.6.0)
+  - BaiduMapKit/Map (6.6.0):
+    - BaiduMapKit/Base
+  - BaiduMapKit/Search (6.6.0):
+    - BaiduMapKit/Base
+  - BaiduMapKit/Utils (6.6.0):
+    - BaiduMapKit/Base
+  - BMKLocationKit (2.1.0)
   - device_info_plus (0.0.1):
     - Flutter
   - DKImagePickerController/Core (4.3.4):
@@ -47,6 +44,24 @@ PODS:
     - DKImagePickerController/PhotoGallery
     - Flutter
   - Flutter (1.0.0)
+  - flutter_baidu_mapapi_base (3.5.0):
+    - BaiduMapKit/Utils (= 6.6.0)
+    - Flutter
+  - flutter_baidu_mapapi_map (3.5.0):
+    - BaiduMapKit/Map (= 6.6.0)
+    - Flutter
+    - flutter_baidu_mapapi_base
+  - flutter_baidu_mapapi_search (3.5.0):
+    - BaiduMapKit/Search (= 6.6.0)
+    - Flutter
+    - flutter_baidu_mapapi_base
+  - flutter_baidu_mapapi_utils (3.5.0):
+    - BaiduMapKit/Utils (= 6.6.0)
+    - Flutter
+    - flutter_baidu_mapapi_base
+  - flutter_bmflocation (3.5.0):
+    - BMKLocationKit (~> 2.1.0)
+    - Flutter
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
   - flutter_localization (0.0.1):
@@ -95,11 +110,14 @@ PODS:
   - ZLPhotoBrowser/Core (4.2.5)
 
 DEPENDENCIES:
-  - amap_flutter_location (from `.symlinks/plugins/amap_flutter_location/ios`)
-  - amap_flutter_map (from `.symlinks/plugins/amap_flutter_map/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
+  - flutter_baidu_mapapi_base (from `.symlinks/plugins/flutter_baidu_mapapi_base/ios`)
+  - flutter_baidu_mapapi_map (from `.symlinks/plugins/flutter_baidu_mapapi_map/ios`)
+  - flutter_baidu_mapapi_search (from `.symlinks/plugins/flutter_baidu_mapapi_search/ios`)
+  - flutter_baidu_mapapi_utils (from `.symlinks/plugins/flutter_baidu_mapapi_utils/ios`)
+  - flutter_bmflocation (from `.symlinks/plugins/flutter_bmflocation/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_localization (from `.symlinks/plugins/flutter_localization/ios`)
   - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
@@ -115,9 +133,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AMap3DMap
-    - AMapFoundation
-    - AMapLocation
+    - BaiduMapKit
+    - BMKLocationKit
     - DKImagePickerController
     - DKPhotoGallery
     - flutter_sound_core
@@ -129,16 +146,22 @@ SPEC REPOS:
     - ZLPhotoBrowser
 
 EXTERNAL SOURCES:
-  amap_flutter_location:
-    :path: ".symlinks/plugins/amap_flutter_location/ios"
-  amap_flutter_map:
-    :path: ".symlinks/plugins/amap_flutter_map/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
     :path: Flutter
+  flutter_baidu_mapapi_base:
+    :path: ".symlinks/plugins/flutter_baidu_mapapi_base/ios"
+  flutter_baidu_mapapi_map:
+    :path: ".symlinks/plugins/flutter_baidu_mapapi_map/ios"
+  flutter_baidu_mapapi_search:
+    :path: ".symlinks/plugins/flutter_baidu_mapapi_search/ios"
+  flutter_baidu_mapapi_utils:
+    :path: ".symlinks/plugins/flutter_baidu_mapapi_utils/ios"
+  flutter_bmflocation:
+    :path: ".symlinks/plugins/flutter_bmflocation/ios"
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_localization:
@@ -165,16 +188,18 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
-  AMap3DMap: dce25dd3e51e6b92109caa7d0c97fc6055830fb3
-  amap_flutter_location: 44ff5beb64f42e0bf5feb402fe299dac0013af6f
-  amap_flutter_map: 979e54d227cedac6c7504a2151bfbf3bcf96760a
-  AMapFoundation: 9885c48fc3a78fdfb84a0299a2293e56ea3c9fec
-  AMapLocation: 5248aec2455ebb5d104b367813c946430a2ee033
+  BaiduMapKit: 155ba6a94b8155826c5ed0f843f18875df2b807b
+  BMKLocationKit: a93bc412af3a601f12d243f4fb83f77650103e56
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: 15fd9539e4eb735dc54bae8c0534a7a9511a03de
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_baidu_mapapi_base: f1b18c6ae9331354e2439875d7670b55d8309ae6
+  flutter_baidu_mapapi_map: d54b33f6618bc9fcdbc3a76426255230b0d3271e
+  flutter_baidu_mapapi_search: 89b48a0c84dbddcffb74c1c68ddf118f76b491ea
+  flutter_baidu_mapapi_utils: a3f5dc1bd58c2517a064139a1ea100a5fc1241b1
+  flutter_bmflocation: 2a478a9b70e1a5fd0857a39a47d06090dbc0a63a
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_localization: f43b18844a2b3d2c71fd64f04ffd6b1e64dd54d4
   flutter_sound: c60effa2a350fb977885f0db2fbc4c1ad5160900
@@ -197,4 +222,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: db1d6475fab1b7dbbf8f96c4a28f1513bc35f9b2
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2

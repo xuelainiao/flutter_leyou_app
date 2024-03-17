@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Mall Community</string>
+	<string>乐悠云社</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -54,7 +54,22 @@
 	<string>当您发送照片给好友或者发布文章选择照片需要使用到</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>允许此APP打开定位，获取周边更多便利信息</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>获取定位权限</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>获取定位权限</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
+	<!-- 百度地图官网指定添加 -->
+	<key>UIBackgroundModes</key>
+	<array>
+	<string>location</string>
+	</array>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+	<key>WantsToTrace</key>
+	<string>鹰眼DEMO需要精确定位</string>
+	</dict>
+
 </dict>
 </plist>

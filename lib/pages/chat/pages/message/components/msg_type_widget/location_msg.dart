@@ -34,6 +34,7 @@ class LocationMsg extends StatelessWidget {
             child: Text(
               "${data['street'] ?? data['name']}",
               style: tx16,
+              maxLines: 1,
             ),
           ),
           Padding(

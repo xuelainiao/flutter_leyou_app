@@ -36,14 +36,14 @@ class AppConfig {
   /// 隐私政策是否同意
   static bool privacyStatementHasAgree = true;
 
-  /// 高德地图 ios key
-  static const String amapIosKey = "b14e65b23c1df6e6baa7453e689162ff";
+  /// 百度地图 ios key
+  static const String amapIosKey = "VE5RJxtPuSqV9eTtId3sY9WtGxd9pjUV";
 
-  /// 高德地图 android key
-  static const String amapAndroidKey = "7d434952c4abaeff7dccd09c73d2b0a7";
+  /// 百度地图 android key
+  static const String amapAndroidKey = "vpb7aVpQ2gb6trP1gxzpt9DUrgmXzXcv";
 
   /// 高德地图 web
-  static const String amapWebkey = "e7cb1a7b75b3b535ebece65ea4c64386";
+  static const String amapWebkey = "VE5RJxtPuSqV9eTtId3sY9WtGxd9pjUV";
 
   /// 极光推送 appkey
   static const String jPushKey = "20552160646e55d1b65abdac";

@@ -20,6 +20,6 @@ class AppPages {
     GetPage(name: '/chat', page: () => MessageListPage()),
 
     // 地图
-    GetPage(name: '/map', page: () => const ShowMapPage()),
+    GetPage(name: '/map', page: () => const MapPage()),
   ];
 }

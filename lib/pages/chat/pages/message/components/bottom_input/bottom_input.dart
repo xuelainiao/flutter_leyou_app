@@ -94,7 +94,7 @@ class _MsgBotInputState extends State<MsgBotInput>
     setState(() {
       showkeyBoard = false;
       menuType = type;
-      bottomHeight = baseHeight + menuHeight;
+      bottomHeight = baseHeight + menuHeight + ScreenUtil().bottomBarHeight;
     });
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_baidu_mapapi_search/flutter_baidu_mapapi_search.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
@@ -107,17 +108,16 @@ class ChatBottomMenu extends StatelessWidget {
   }
 
   location() async {
-    var result = await Get.toNamed('/map');
+    BMFPoiInfo? result = await Get.toNamed('/map') as BMFPoiInfo?;
     if (result != null) {
       String data = jsonEncode({
-        'address': result['address'],
-        'name': result['name'],
-        'province': result['province'],
-        'street': result["street"],
-        'district': result["district"],
-        "latitude": result["latitude"],
-        "longitude": result['longitude'],
-        "description": result['description'],
+        'address': result.address,
+        'name': result.name,
+        'province': result.province,
+        'street': result.streetID,
+        'district': result.direction,
+        "latitude": result.pt?.latitude,
+        "longitude": result.pt?.longitude,
       });
       chatController.sendMsg(data, type: MessageType.location);
     }

@@ -1,77 +1,150 @@
-import 'package:amap_flutter_location/amap_flutter_location.dart';
-import 'package:amap_flutter_location/amap_location_option.dart';
+import 'dart:io';
+import 'package:flutter_baidu_mapapi_base/flutter_baidu_mapapi_base.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_baidu_mapapi_map/flutter_baidu_mapapi_map.dart';
+import 'package:flutter_bmflocation/flutter_bmflocation.dart';
+import 'package:mall_community/common/app_config.dart';
 import 'package:mall_community/utils/permission/permission.dart';
 import 'package:mall_community/utils/storage.dart';
-import 'package:mall_community/utils/toast/toast.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'location_module.dart';
 
-class AampLocation {
-  static AampLocation? _instance;
+/// 百度定位
+class BdLocation {
+  static BdLocation? _instance;
 
   /// 定位控制器
-  late AMapFlutterLocation amapLocation;
+  static LocationFlutterPlugin? _bdLocPlugin;
 
-  /// 当前定位参数
-  late AMapLocationOption option;
+  /// 定位数据
+  static BaiduLocation? address;
 
-  /// 当前定位消息
-  /// {locTime: 2023-09-14 16:24:46, province: 广东省, callbackTime: 2023-09-14 16:24:50, district: 白云区, country: 中国, street: 航云南街, speed: -1.0, latitude: 23.173277, city: 广州市, streetNumber: 102号, bearing: -1.0, accuracy: 35.0, adCode: 440111, altitude: 22.018461227416992, locationType: 1, longitude: 113.261964, cityCode: 020, address: 广东省广州市白云区航云南街靠近集盛大厦, description: 广东省广州市白云区航云南街靠近集盛大厦}
-  static LocationModule? address;
+  BdLocation._internal() {
+    _bdLocPlugin ??= LocationFlutterPlugin();
+    // Map? event = Storage().read('address');
+    // address = event == null ? null : BaiduLocation.fromMap(event);
+  }
 
-  factory AampLocation({AMapLocationOption? op}) {
-    _instance ??= AampLocation._internal(op);
+  factory BdLocation() {
+    _instance ??= BdLocation._internal();
     return _instance!;
   }
 
-  AampLocation._internal(AMapLocationOption? op) {
-    option = op ??
-        AMapLocationOption(
-          onceLocation: true,
-          desiredAccuracy: DesiredAccuracy.HundredMeters,
-          desiredLocationAccuracyAuthorizationMode:
-              AMapLocationAccuracyAuthorizationMode.ReduceAccuracy,
-        );
-    Map? event = Storage().read('address');
-    address = event == null ? null : LocationModule.fromJson(event);
+  /// 初始化
+  Future<void> init() async {
+    // 否隐私政策
+    _bdLocPlugin?.setAgreePrivacy(AppConfig.privacyStatementHasAgree);
+    BMFMapSDK.setAgreePrivacy(AppConfig.privacyStatementHasAgree);
+    if (Platform.isIOS) {
+      _bdLocPlugin?.authAK(AppConfig.amapIosKey);
+      BMFMapSDK.setApiKeyAndCoordType(
+        AppConfig.amapIosKey,
+        BMF_COORD_TYPE.BD09LL,
+      );
+    } else if (Platform.isAndroid) {
+      BMFAndroidVersion.initAndroidVersion();
+      BMFMapSDK.setCoordType(BMF_COORD_TYPE.BD09LL);
+    }
+
+    debugPrint("地图定位初始化完毕${AppConfig.privacyStatementHasAgree}");
   }
 
-  /// 获取当前定位 持续定位
-  /// AMapLocationOption options 当前定位参数
-  /// callback 持续定位回调
-  getLocation({Function(LocationModule)? callback}) async {
-    var result = await AppPermission.getPermission(Permission.location);
-    if (result) {
-      amapLocation = AMapFlutterLocation();
-      amapLocation.setLocationOption(option);
-      amapLocation.startLocation();
-      amapLocation.onLocationChanged().listen((event) {
-        if (event.containsKey("errorCode")) {
-          ToastUtils.showToast(event['errorInfo'].toString());
-          return;
-        }
-        address = LocationModule.fromJson(event);
-        callback?.call(address!);
-        if (option.onceLocation) {
-          Storage().write('address', event);
-          destroy();
-          debugPrint("结束定位");
-        }
-      }, onError: (e) {
-        ToastUtils.showToast('定位失败');
+  /// 获取当前位置 单次
+  Future getLocation({
+    required Function(BaiduLocation) callBack,
+  }) async {
+    await AppPermission.getPermission(Permission.location);
+    Map iosMap = _initIOSOptions().getMap();
+    Map androidMap = _initAndroidOptions().getMap();
+    await _bdLocPlugin?.prepareLoc(androidMap, iosMap);
+
+    if (Platform.isIOS) {
+      _bdLocPlugin?.singleLocationCallback(callback: (BaiduLocation result) {
+        address = result;
+        callBack(result);
+        Storage().write('address', result.getMap());
       });
+      await _bdLocPlugin
+          ?.singleLocation({'isReGeocode': true, 'isNetworkState': true});
+    } else if (Platform.isAndroid) {
+      _bdLocPlugin?.seriesLocationCallback(callback: (BaiduLocation result) {
+        address = result;
+        callBack(result);
+        _bdLocPlugin?.stopLocation();
+        Storage().write('address', result.getMap());
+      });
+      await _bdLocPlugin?.startLocation();
     }
   }
 
-  /// 结束定位
-  closeLocation() {
-    amapLocation.stopLocation();
+  ///连续定位
+  Future seriesLocation({
+    required Function(BaiduLocation) callBack,
+  }) async {
+    await AppPermission.getPermission(Permission.locationAlways);
+    Map iosMap = _initIOSOptions().getMap();
+    Map androidMap = _initAndroidOptions(scanspan: 4000).getMap();
+    await _bdLocPlugin?.prepareLoc(androidMap, iosMap);
+
+    _bdLocPlugin?.seriesLocationCallback(callback: (BaiduLocation result) {
+      callBack(result);
+    });
+    await _bdLocPlugin?.startLocation();
   }
 
-  ///销毁定位
-  destroy() {
-    amapLocation.stopLocation();
-    amapLocation.destroy();
+  ///连续定位关闭
+  Future stopLocation() async {
+    await _bdLocPlugin?.stopLocation();
+  }
+
+  BaiduLocationAndroidOption _initAndroidOptions({int scanspan = 0}) {
+    BaiduLocationAndroidOption options = BaiduLocationAndroidOption(
+        // 定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+        locationMode: BMFLocationMode.hightAccuracy,
+        // 是否需要返回地址信息
+        isNeedAddress: true,
+        // 是否需要返回海拔高度信息
+        isNeedAltitude: true,
+        // 是否需要返回周边poi信息
+        isNeedLocationPoiList: true,
+        // 是否需要返回新版本rgc信息
+        isNeedNewVersionRgc: true,
+        // 是否需要返回位置描述信息
+        isNeedLocationDescribe: true,
+        // 是否使用gps
+        openGps: true,
+        // 可选，设置场景定位参数，包括签到场景、运动场景、出行场景
+        locationPurpose: BMFLocationPurpose.signIn,
+        // 坐标系
+        coordType: BMFLocationCoordType.bd09ll,
+        // 设置发起定位请求的间隔，int类型，单位ms
+        // 如果设置为0，则代表单次定位，即仅定位一次，默认为0
+        scanspan: scanspan);
+    return options;
+  }
+
+  BaiduLocationIOSOption _initIOSOptions() {
+    BaiduLocationIOSOption options = BaiduLocationIOSOption(
+      // 坐标系
+      coordType: BMFLocationCoordType.bd09ll,
+      // 位置获取超时时间
+      locationTimeout: 10,
+      // 获取地址信息超时时间
+      reGeocodeTimeout: 10,
+      // 应用位置类型 默认为automotiveNavigation
+      activityType: BMFActivityType.automotiveNavigation,
+      // 设置预期精度参数 默认为best
+      desiredAccuracy: BMFDesiredAccuracy.best,
+      // 是否需要最新版本rgc数据
+      isNeedNewVersionRgc: true,
+      // 指定定位是否会被系统自动暂停
+      pausesLocationUpdatesAutomatically: false,
+      // 指定是否允许后台定位,
+      // 允许的话是可以进行后台定位的，但需要项目
+      // 配置允许后台定位，否则会报错，具体参考开发文档
+      allowsBackgroundLocationUpdates: true,
+      // 设定定位的最小更新距离
+      distanceFilter: 10,
+    );
+    return options;
   }
 }

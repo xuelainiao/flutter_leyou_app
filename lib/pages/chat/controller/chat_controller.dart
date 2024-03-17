@@ -201,7 +201,7 @@ class ChatController extends GetxController {
 
   /// 消息列表超出屏幕检测
   checkListExceed() {
-    double extentTotal = scrollControll.position.extentTotal;
+    // double extentTotal = scrollControll.position.extentTotal;
     double extentInside = scrollControll.position.extentInside;
     offSet.value = (scrollControll.position.extentBefore) / extentInside;
   }

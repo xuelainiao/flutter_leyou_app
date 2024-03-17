@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/app_config.dart';
 import 'package:mall_community/common/comm_style.dart';
+import 'package:mall_community/utils/location/location.dart';
 import 'package:mall_community/utils/storage.dart';
 
 /// 隐私协议政策
@@ -67,10 +68,9 @@ class PrivacyStatementPage extends StatelessWidget {
 
   toHome() {
     AppConfig.privacyStatementHasAgree = true;
-    Storage().write('privacyStatementHasAgree', true);
-    // AMapFlutterLocation.updatePrivacyShow(true, true);
-    // AMapFlutterLocation.updatePrivacyAgree(true);
     Get.offNamed('/home');
+    Storage().write('privacyStatementHasAgree', true);
+    BdLocation().init();
   }
 
   @override

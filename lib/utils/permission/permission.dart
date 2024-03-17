@@ -23,7 +23,7 @@ class AppPermission {
   }
 
   /// 申请权限
-  static requestPermission(Permission permission) async {
+  static Future requestPermission(Permission permission) async {
     PermissionStatus status = await permission.request();
     if (status.isPermanentlyDenied) {
       await openAppSettings();

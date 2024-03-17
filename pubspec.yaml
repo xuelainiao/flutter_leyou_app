@@ -14,7 +14,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.1.1
+version: 1.1.2
 
 environment:
   sdk: ">=3.2.3 <4.0.0"
@@ -94,12 +94,15 @@ dependencies:
   permission_handler: ^11.2.0
   # 文件地址 目前用于录音临时文件地址
   path_provider: ^2.1.2
-  # 高德地图定位和搜索
-  amap_flutter_map: ^3.0.0
-  amap_flutter_base: ^3.0.0
-  amap_flutter_location: ^3.0.0
+  # 百度地图
+  flutter_bmflocation: ^3.6.0
+  flutter_baidu_mapapi_map: ^3.6.0
+  flutter_baidu_mapapi_utils: ^3.6.0
+  flutter_baidu_mapapi_search: ^3.6.0
   # 向上滑动的面板，适合地图场景
   sliding_up_panel: ^2.0.0+1
+  # 分帧渲染 针对性能列表优化
+  keframe: ^3.0.0
 
 dev_dependencies:
   flutter_test:
