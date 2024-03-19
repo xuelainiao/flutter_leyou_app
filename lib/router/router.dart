@@ -5,6 +5,8 @@ import 'package:mall_community/pages/login/login.dart';
 import 'package:mall_community/pages/map_search/map_search.dart';
 import 'package:mall_community/pages/privacy_statement/privacy_statement.dart';
 
+import '../pages/chat/pages/call_video/call_video.dart';
+
 class AppPages {
   static final List<GetPage> pages = [
     // 首页
@@ -17,7 +19,9 @@ class AppPages {
     ),
 
     // 好友模块
-    GetPage(name: '/chat', page: () => MessageListPage()),
+    GetPage(name: '/chat', page: () => MessageListPage(), children: [
+      GetPage(name: "/call_video", page: () => const CallVieoPage())
+    ]),
 
     // 地图
     GetPage(name: '/map', page: () => const MapPage()),

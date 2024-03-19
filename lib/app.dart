@@ -50,7 +50,7 @@ class _MyappState extends State<MyApp> {
           getPages: AppPages.pages,
           title: '乐悠云社',
           initialRoute: AppConfig.privacyStatementHasAgree
-              ? '/home'
+              ? '/chat/call_video'
               : '/privacyStatement',
           showPerformanceOverlay: false,
           theme: AppTheme.primaryTheme,

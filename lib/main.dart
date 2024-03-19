@@ -11,6 +11,8 @@ void main() async {
   runApp(const MyApp());
 }
 
+
+
 init() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 存储

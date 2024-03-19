@@ -40,6 +40,8 @@ dependencies:
   # 视频播放
   chewie: ^1.7.4
   video_player: ^2.8.2
+  # 音视频通话
+  flutter_webrtc: ^0.9.48+hotfix.1
   # better_player: ^0.0.83
   # 缓存管理 支持下载文件临时缓存
   flutter_cache_manager: ^3.3.1
