@@ -6,7 +6,7 @@ import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/automatic_keep_alive/automatic_keep_alive.dart';
 import 'package:mall_community/components/avatar/avatar.dart';
 import 'package:mall_community/components/Loading/Loading.dart';
-import 'package:mall_community/pages/home/msg_list_page/module/msg_list_module.dart';
+import 'package:mall_community/pages/home/msg_list_page/controller/msg_list_module.dart';
 
 ///好友列表
 class FriendList extends StatelessWidget {

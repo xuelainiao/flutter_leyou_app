@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:mall_community/common/app_locale.dart';
 import 'package:mall_community/common/theme.dart';
 import 'package:mall_community/components/easy_refresh_diy/easy_refresh_diy.dart';
+import 'package:mall_community/controller/global_base_socket.dart';
 import 'package:mall_community/router/router.dart';
 import 'common/app_config.dart';
 
@@ -18,6 +19,7 @@ class MyApp extends StatefulWidget {
 
 class _MyappState extends State<MyApp> {
   final FlutterLocalization localization = FlutterLocalization.instance;
+  final BaseSocket baseSocket = Get.put(BaseSocket());
 
   @override
   void initState() {
@@ -50,7 +52,7 @@ class _MyappState extends State<MyApp> {
           getPages: AppPages.pages,
           title: '乐悠云社',
           initialRoute: AppConfig.privacyStatementHasAgree
-              ? '/chat/call_video'
+              ? '/home'
               : '/privacyStatement',
           showPerformanceOverlay: false,
           theme: AppTheme.primaryTheme,

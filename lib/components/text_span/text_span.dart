@@ -17,8 +17,8 @@ class TextSpanEmoji extends StatelessWidget {
 
   final RegExp emojiRegex = RegExp(r'\[[^\]]+\]');
   final FocusNode focusNode = FocusNode();
-  SelectableRegionState? state;
-  SelectedContent? selectedContent;
+  late final SelectableRegionState? state;
+  late final SelectedContent? selectedContent;
 
   /// 取消选择
   void closeSlect() {

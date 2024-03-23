@@ -10,13 +10,40 @@ class SocketEvent {
   static String joinFriendSocket = 'joinFriendSocket';
 
   ///发送私聊消息
-  static String friendMessage = 'friendMessage';
+  static const String friendMessage = 'friendMessage';
+
+  /// 拨打电话
+  static const String callPhone = "callPhone";
+
+  /// 接听电话
+  static const String answerPhone = "answerPhone";
+
+  /// 拒接电话
+  static const String rejectPhone = "rejectPhone";
+
+  /// 拨打电话对方未接听
+  static const String noAnswerPhone = "noAnswerPhone";
+
+  /// 通话挂断
+  static const String hangUpPhone = "hangUpPhone";
+
+  /// ice候选人交换
+  static const String iceCandidate = "iceCandidate";
+
+  /// webrtc offer 发送
+  static const String rtcOffer = "rtcOffer";
+
+  /// webrtc Answer 发送
+  static const String rtcAnswer = "rtcAnswer";
+
+  /// 视频通话画面关闭
+  static const String cameraClose = "cameraClose";
 
   ///获取所有群和好友数据
-  static String chatData = 'chatData';
+  static const String chatData = 'chatData';
 
   /// 加入群组
-  static String joinGroup = 'joinGroup';
+  static const String joinGroup = 'joinGroup';
 
   /// 创建群组
   static String addGroup = 'addGroup';

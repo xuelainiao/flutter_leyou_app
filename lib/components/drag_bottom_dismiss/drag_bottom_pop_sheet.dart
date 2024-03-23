@@ -23,12 +23,12 @@ class DragBottomPopSheet extends StatefulWidget {
   final AnimationController fadeAnimationController;
 
   @override
-  _DragBottomPopSheetState createState() => _DragBottomPopSheetState();
+  DragBottomPopSheetState createState() => DragBottomPopSheetState();
 
   static const double minScale = 0.6;
 }
 
-class _DragBottomPopSheetState extends State<DragBottomPopSheet>
+class DragBottomPopSheetState extends State<DragBottomPopSheet>
     with SingleTickerProviderStateMixin {
   final ValueNotifier<double> _scaleNotifier = ValueNotifier<double>(1.0);
   final ValueNotifier<Offset> _offsetNotifier =

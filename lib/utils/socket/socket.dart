@@ -1,6 +1,6 @@
-import 'package:flutter/widgets.dart';
 import 'package:mall_community/common/app_config.dart';
 import 'package:mall_community/modules/user_module.dart';
+import 'package:mall_community/utils/log/log.dart';
 import 'package:mall_community/utils/socket/socket_event.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
@@ -51,7 +51,7 @@ class SocketManager {
     _socket?.onDisconnect(_onDisconnect);
     _socket?.onConnectTimeout(_onTimeOut);
     _socket?.onConnectError((err) {
-      debugPrint('socket 连接错误 $err');
+      Log.error("socket 连接错误", err);
       _status = 2;
     });
 
@@ -87,6 +87,7 @@ class SocketManager {
     roomList.clear();
     emits.clear();
     _socket?.dispose();
+    _socket?.destroy();
   }
 
   ///加入房间
@@ -142,7 +143,7 @@ class SocketManager {
 
   /// 连接成功
   _onConnect(e) {
-    debugPrint('socket 连接成功$e');
+    Log.info("socket 连接成功", e);
     _status = 1;
     if (roomList.isNotEmpty) {
       List rooms = List.from(roomList);
@@ -155,7 +156,7 @@ class SocketManager {
 
   /// 断开连接回调
   _onDisconnect(e) {
-    debugPrint('socket 断链 $e');
+    Log.info("socket 断链", e);
     _status = 2;
   }
 
@@ -170,7 +171,7 @@ class SocketManager {
   }
 
   /// 消息发送超时
-  _onTimeOut(data){
-    debugPrint("链接超时 $data");
+  _onTimeOut(data) {
+    Log.error("socket 链接超时", data);
   }
 }

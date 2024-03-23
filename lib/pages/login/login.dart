@@ -20,7 +20,7 @@ class LoginPage extends StatelessWidget {
     ToastUtils.showLoad(message: '登录中...');
     var reuslt = await reqLogin(form);
     UserInfo.token = reuslt.data['token'];
-    UserInfo.info = reuslt.data['user'];
+    UserInfo.setUser = reuslt.data['user'];
     Storage().write('user_info', reuslt.data['user']);
     Storage().write('token', reuslt.data['token']);
     Get.back();

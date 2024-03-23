@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
+import 'package:mall_community/pages/chat/pages/call_video/call_video.dart';
 import 'package:mall_community/pages/chat/pages/message/message.dart';
 import 'package:mall_community/pages/home/home_table.dart';
 import 'package:mall_community/pages/login/login.dart';
 import 'package:mall_community/pages/map_search/map_search.dart';
 import 'package:mall_community/pages/privacy_statement/privacy_statement.dart';
-
-import '../pages/chat/pages/call_video/call_video.dart';
 
 class AppPages {
   static final List<GetPage> pages = [

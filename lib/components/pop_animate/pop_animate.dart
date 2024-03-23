@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 
 class PopAnimate extends StatefulWidget {
-  final Widget child;
-  final Duration duration;
-  final Alignment alignment;
-
   const PopAnimate({
     Key? key,
     required this.child,
     this.duration = const Duration(milliseconds: 300),
     this.alignment = Alignment.topCenter,
+    this.isSafeArea = true,
   }) : super(key: key);
+
+  final Widget child;
+
+  /// 动画时长
+  final Duration duration;
+
+  /// 动画出现的方向 也可以理解为对齐方向
+  final Alignment alignment;
+
+  /// 是否兼容上安全区域 默认为 true
+  final bool isSafeArea;
 
   @override
   State<PopAnimate> createState() => _PopAnimateState();
@@ -45,10 +53,20 @@ class _PopAnimateState extends State<PopAnimate>
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      alignment: widget.alignment,
-      child: widget.child,
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height,
+      width: size.width,
+      padding: EdgeInsets.symmetric(
+        vertical: widget.isSafeArea ? MediaQuery.of(context).padding.top : 0,
+      ),
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        alignment: widget.alignment,
+        child: Column(
+          children: [widget.child],
+        ),
+      ),
     );
   }
 }

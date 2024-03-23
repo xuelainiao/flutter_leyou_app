@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/text_span/text_span.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/message_box.dart';
 import 'package:mall_community/utils/time_util.dart';
 
@@ -14,7 +14,7 @@ class ReplyMsg extends StatelessWidget {
     required this.isMy,
     required this.msgKey,
   });
-  final SendMsgDto item;
+  final SendMsgModule item;
   final bool isMy;
   final GlobalKey msgKey;
 
@@ -72,7 +72,7 @@ class ReplyMsg extends StatelessWidget {
   }
 
   /// 回复消息原文
-  Widget replyTheOriginal(SendMsgDto quote) {
+  Widget replyTheOriginal(SendMsgModule quote) {
     if (quote.messageType == MessageType.text) {
       return TextSpanEmoji(
         text: quote.content,

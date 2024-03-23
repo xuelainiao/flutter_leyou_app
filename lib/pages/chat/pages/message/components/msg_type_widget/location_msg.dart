@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/new_work_image_widget/new_work_image_widget.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 
 class LocationMsg extends StatelessWidget {
   const LocationMsg({super.key, required this.item});
-  final SendMsgDto item;
+  final SendMsgModule item;
 
   getImgUrl(longitude, latitude) {
     return "https://restapi.amap.com/v3/staticmap?markers=-1,https://public-1259264706.cos.ap-guangzhou.myqcloud.com/flutter_app/address/location.png,0:$longitude,$latitude&key=ee95e52bf08006f63fd29bcfbcf21df0&size=350*150&zoom=19";

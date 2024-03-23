@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 
 class QuotePop extends StatelessWidget {
   QuotePop({super.key});
@@ -13,7 +13,7 @@ class QuotePop extends StatelessWidget {
   }
 
   String getQuoteMsg() {
-    SendMsgDto? quoteMsg = chatController.quoteMsg.value;
+    SendMsgModule? quoteMsg = chatController.quoteMsg.value;
     if (quoteMsg != null) {
       switch (quoteMsg.messageType) {
         case MessageType.file:

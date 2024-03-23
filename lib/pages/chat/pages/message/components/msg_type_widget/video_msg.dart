@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mall_community/components/new_work_image_widget/new_work_image_widget.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 import 'package:mall_community/utils/utils.dart';
 
 /// 视频消息
 class VideoMsg extends StatelessWidget {
   const VideoMsg({super.key, required this.item, required this.isMy});
 
-  final SendMsgDto item;
+  final SendMsgModule item;
   final bool isMy;
 
   tap(ctx, String url, String cover) {

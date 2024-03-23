@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:mall_community/modules/user_module.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
 
-/// Im消息DTO
-class SendMsgDto {
+/// Im消息 module
+class SendMsgModule {
   /// 消息体
   late String content;
 
@@ -25,7 +26,7 @@ class SendMsgDto {
   /// 消息状态-前端自己维护不上传-用于消息发送状态效果
   CustomMsgStatus? status;
 
-  SendMsgDto(Map json, {SendMsgDto? quote}) {
+  SendMsgModule(Map json, {SendMsgModule? quote}) {
     messageType = json['messageType'];
     content =
         json['content'] is Map ? jsonEncode(json['content']) : json['content'];
@@ -91,13 +92,13 @@ class FileMsgInfo {
 }
 
 /// 引用消息DTO
-class QuoteMsgDto extends SendMsgDto {
-  late SendMsgDto quote;
+class QuoteMsgDto extends SendMsgModule {
+  late SendMsgModule quote;
 
   QuoteMsgDto(Map json) : super(json) {
     Map textData = jsonDecode(json['content']);
     content = textData['content'] ?? '';
-    quote = SendMsgDto(textData['quote']);
+    quote = SendMsgModule(textData['quote']);
     messageType = MessageType.reply;
   }
 
@@ -106,6 +107,101 @@ class QuoteMsgDto extends SendMsgDto {
     final json = super.toJson();
     json['quote'] = quote.toJson();
     return json;
+  }
+}
+
+/// 音视频消息
+class CallVideoMsg {
+  CallVideoMsg(dynamic json) {
+    time = json['time'] ?? "";
+    status = json['status'] ?? "";
+    fromUser = CallVideoUser(
+      json["fromUser"] ??
+          {
+            "nickNmae": UserInfo.user['userName'],
+            "avatar": UserInfo.user['avatar'],
+            "userId": UserInfo.user['userId'],
+          },
+    );
+    toUserId = json['toUserId'];
+    sdpInfo = json['sdpInfo'] ?? "";
+    viewId = json['viewId'] ?? "";
+    isVideoEnabled = json["isVideoEnabled"] ?? true;
+  }
+
+  /// 通话时长
+  /// 空代表未接通
+  /// 用于通话中挂断电话场景
+  late String time;
+
+  /// 通话状态
+  late String status;
+
+  /// 发送者信息
+  late CallVideoUser fromUser;
+
+  /// 接受者 userId
+  late String toUserId;
+
+  /// 音视频 sdp 交换信息
+  /// 需要json格式化传递
+  late String sdpInfo;
+
+  /// webrtcView id
+  late String viewId;
+
+  /// 发送者的视频画面状态
+  /// false 关闭
+  /// true 开启
+  late bool isVideoEnabled;
+
+  Map toMap() {
+    return {
+      'time': time,
+      'status': status,
+      'fromUser': fromUser.toMap(),
+      'toUserId': toUserId,
+      'sdpInfo': sdpInfo,
+      'viewId': viewId,
+      'isVideoEnabled': isVideoEnabled,
+    };
+  }
+}
+
+class CallVideoUser {
+  CallVideoUser(dynamic json) {
+    nickNmae = json['nickNmae'] ?? "";
+    avatar = json['avatar'] ?? "";
+    userId = json['userId'] ?? "";
+  }
+  late String nickNmae;
+  late String avatar;
+  late String userId;
+
+  toMap() {
+    return {
+      "nickNmae": nickNmae,
+      "avatar": avatar,
+      "userId": userId,
+    };
+  }
+}
+
+/// 音视频ICE候选人交换信息
+class CallIceCandidate {
+  CallIceCandidate(Map map) {
+    toUserId = map['toUserId'] ?? "";
+    candidate = map['iceData'] ?? "";
+  }
+
+  /// 接听方 userId
+  late String toUserId;
+
+  /// ice 信息 json处理过
+  late String candidate;
+
+  toMap() {
+    return {"toUserId": toUserId, "candidate": candidate};
   }
 }
 
@@ -143,4 +239,7 @@ class MessageType {
 
   /// 回复
   static const String reply = 'reply';
+
+  /// 视频通话消息
+  static const String callPhone = 'callPhone';
 }

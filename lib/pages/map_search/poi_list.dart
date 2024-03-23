@@ -4,11 +4,9 @@ import 'package:flutter_baidu_mapapi_base/flutter_baidu_mapapi_base.dart'
     show BMFCoordinate;
 import 'package:flutter_baidu_mapapi_search/flutter_baidu_mapapi_search.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:keframe/keframe.dart';
 import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/loading/loading.dart';
 import 'package:mall_community/components/not_data/not_data.dart';
-import 'package:mall_community/utils/location/location.dart';
 import 'package:mall_community/utils/toast/toast.dart';
 
 /// 当前经纬度周边信息

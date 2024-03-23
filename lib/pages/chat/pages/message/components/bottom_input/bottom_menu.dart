@@ -5,7 +5,7 @@ import 'package:flutter_baidu_mapapi_search/flutter_baidu_mapapi_search.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
 import 'package:mall_community/utils/file_picker/file_picker.dart';
 import 'package:mall_community/utils/image_picker/image_picker.dart';
@@ -48,6 +48,9 @@ class ChatBottomMenu extends StatelessWidget {
         break;
       case '定位':
         location();
+        break;
+      case '视频通话':
+        toCall();
         break;
       default:
         imageMsg();
@@ -123,7 +126,9 @@ class ChatBottomMenu extends StatelessWidget {
     }
   }
 
-  videoCall() async {}
+  toCall() async {
+    await Get.toNamed('/chat/call_video', arguments: chatController.params);
+  }
 
   @override
   Widget build(BuildContext context) {

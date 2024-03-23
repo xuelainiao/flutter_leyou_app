@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/components/new_work_image_widget/new_work_image_widget.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 
 class ImageMsg extends StatelessWidget {
   ImageMsg({
@@ -13,7 +13,7 @@ class ImageMsg extends StatelessWidget {
     required this.item,
   });
 
-  final SendMsgDto item;
+  final SendMsgModule item;
   final bool isMy;
   final UniqueKey uniqueKey = UniqueKey();
 

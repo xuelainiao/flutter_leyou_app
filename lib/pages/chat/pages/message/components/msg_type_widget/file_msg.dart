@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/file_icon/file_icon.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 
 class FileMsg extends StatelessWidget {
   const FileMsg({super.key, required this.item, required this.isMy});
 
-  final SendMsgDto item;
+  final SendMsgModule item;
   final bool isMy;
 
   getIcon(String name) {}

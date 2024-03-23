@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:mall_community/components/drag_bottom_dismiss/drag_bottom_dismiss_dialog.dart';
 import 'package:mall_community/modules/user_module.dart';
 import 'package:mall_community/pages/chat/api/msg.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 import 'package:mall_community/pages/preview_image/preview_image.dart';
 import 'package:mall_community/utils/socket/socket_event.dart';
 import 'package:mall_community/utils/socket/socket.dart';
@@ -39,9 +39,11 @@ class ChatController extends GetxController {
   RxBool isBottom = true.obs;
   // 消息是否超出一屏
   RxBool listRxceed = false.obs;
+  // 来电通知key
+  UniqueKey callPopKey = UniqueKey();
 
   // 历史消息
-  RxList<SendMsgDto> msgHistoryList = <SendMsgDto>[].obs;
+  RxList<SendMsgModule> msgHistoryList = <SendMsgModule>[].obs;
   var params = {};
   int total = 0;
   final loading = false.obs;
@@ -54,9 +56,9 @@ class ChatController extends GetxController {
       var result = await reqMessages(params);
       total = result.data['total'];
       if (result.data['list'].length > 0) {
-        List<SendMsgDto> list = [];
+        List<SendMsgModule> list = [];
         result.data['list'].forEach((item) {
-          list.add(SendMsgDto(item));
+          list.add(SendMsgModule(item));
         });
         msgHistoryList.addAll(list);
       }
@@ -68,28 +70,31 @@ class ChatController extends GetxController {
   }
 
   // 新消息数组
-  RxList<SendMsgDto> newMsgList = <SendMsgDto>[].obs;
+  RxList<SendMsgModule> newMsgList = <SendMsgModule>[].obs;
   // 新消息数量
   RxInt newMsgNums = 0.obs;
   // 引用消息回复消息
-  Rx<SendMsgDto?> quoteMsg = Rx<SendMsgDto?>(null);
+  Rx<SendMsgModule?> quoteMsg = Rx<SendMsgModule?>(null);
 
   /// 发送消息
-  void sendMsg(String msg, {String type = 'text'}) {
+  void sendMsg(String msg, {String type = 'text', String? socketEventType}) {
     Map msgData = {
       'content': msg,
-      'userId': UserInfo.info['userId'],
+      'userId': UserInfo.user['userId'],
       'friendId': params['friendId'],
       'messageType': type
     };
-    var data = SendMsgDto(msgData, quote: quoteMsg.value);
+    var data = SendMsgModule(msgData, quote: quoteMsg.value);
     data.status = CustomMsgStatus.sending;
-    socket.sendMessage(SocketEvent.friendMessage, data: data.toJson());
+    socket.sendMessage(
+      socketEventType ?? SocketEvent.friendMessage,
+      data: data.toJson(),
+    );
     addMsg(data);
   }
 
   /// 追加消息
-  void addMsg(SendMsgDto data) {
+  void addMsg(SendMsgModule data) {
     newMsgList.add(data);
     if (isBottom.value) {
       toBottom();
@@ -102,7 +107,7 @@ class ChatController extends GetxController {
   setMsgStatus(CustomMsgStatus status, msgTime) {
     int inx = newMsgList.indexWhere((item) => item.time == msgTime);
     if (inx != -1) {
-      SendMsgDto newMsg = newMsgList[inx];
+      SendMsgModule newMsg = newMsgList[inx];
       newMsg.status = status;
       newMsgList[inx] = newMsg;
     }
@@ -117,7 +122,7 @@ class ChatController extends GetxController {
   /// 预览图片
   previewImage(url) async {
     List<Map<String, dynamic>> imgs = [];
-    List<SendMsgDto> msgList = [...newMsgList, ...msgHistoryList];
+    List<SendMsgModule> msgList = [...newMsgList, ...msgHistoryList];
     for (var i = 0; i < msgList.length; i++) {
       var item = msgList[i];
       if (item.messageType == MessageType.image) {
@@ -149,7 +154,7 @@ class ChatController extends GetxController {
     socket.subscribe(SocketEvent.friendMessage, (data) {
       Map? result = data['data'];
       if (result != null) {
-        data = SendMsgDto(result);
+        data = SendMsgModule(result);
       }
       if (data.userId == params['userId']) {
         addMsg(data);
@@ -157,7 +162,6 @@ class ChatController extends GetxController {
         setMsgStatus(CustomMsgStatus.success, data.time);
       }
     });
-    // 消息撤回
   }
 
   void closeEvent() {

@@ -14,10 +14,20 @@ class OverlayManager {
   Map<String, OverlayEntry> overlayMap = {};
 
   /// 显示Overlay
-  void showOverlay(Widget widget, UniqueKey key, {bool isAnimate = true}) {
+  void showOverlay(
+    Widget widget,
+    UniqueKey key, {
+    bool isAnimate = true,
+    Alignment alignment = Alignment.center,
+  }) {
     OverlayEntry overlayEntry = OverlayEntry(
       builder: (context) {
-        return isAnimate ? PopAnimate(child: widget) : widget;
+        return isAnimate
+            ? PopAnimate(
+                alignment: alignment,
+                child: widget,
+              )
+            : widget;
       },
     );
     overlayMap[key.toString()] = overlayEntry;

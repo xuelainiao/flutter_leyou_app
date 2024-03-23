@@ -1,6 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:dio/dio.dart' as dio;
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 import 'package:mall_community/utils/tx_cos/tx_cos.dart';
 
 /// app 选择文件

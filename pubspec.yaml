@@ -101,10 +101,13 @@ dependencies:
   flutter_baidu_mapapi_map: ^3.6.0
   flutter_baidu_mapapi_utils: ^3.6.0
   flutter_baidu_mapapi_search: ^3.6.0
+  # widget 拖拽
+  floating_draggable_widget: ^2.1.5
   # 向上滑动的面板，适合地图场景
   sliding_up_panel: ^2.0.0+1
   # 分帧渲染 针对性能列表优化
   keframe: ^3.0.0
+  logger: ^1.4.0
 
 dev_dependencies:
   flutter_test:

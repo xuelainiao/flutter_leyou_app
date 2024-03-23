@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/sound_pop/sound_pop.dart';
 import 'package:mall_community/modules/user_module.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
 import 'package:mall_community/pages/chat/pages/message/components/bottom_input/waveforms.dart';
 import 'package:mall_community/utils/socket/socket_event.dart';
@@ -98,9 +98,9 @@ class _SoundInputState extends State<SoundInput> {
       if (soundResuelt.second <= 1) {
         return ToastUtils.showToast('说话时间太短了', type: 'error');
       }
-      var data = SendMsgDto({
+      var data = SendMsgModule({
         'content': soundResuelt.toJson(),
-        'userId': UserInfo.info['userId'],
+        'userId': UserInfo.user['userId'],
         'friendId': widget.chatController.params['friendId'],
         'messageType': MessageType.voice,
       });

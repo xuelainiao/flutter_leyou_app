@@ -8,8 +8,9 @@ import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/components/avatar/avatar.dart';
 import 'package:mall_community/components/pop_menu/pop_menu.dart';
 import 'package:mall_community/components/text_span/text_span.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
+import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/call_video.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/file_msg.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/image_msg.dart';
 import 'package:mall_community/pages/chat/pages/message/components/msg_type_widget/location_msg.dart';
@@ -31,16 +32,16 @@ class MessageBox extends StatelessWidget {
     required this.toolBarKey,
   });
 
-  final SendMsgDto item;
+  final SendMsgModule item;
   final String avatar;
   final bool isMy;
   final UniqueKey toolBarKey;
   final GlobalKey msgKey = GlobalKey();
   final GlobalKey textSpanEmojiKey = GlobalKey();
   final ChatController chatController = Get.find();
-  Timer? timer;
-  SelectedContent? textSelection;
-  SelectionChangedCause? selectCause;
+  late final Timer? timer;
+  late final SelectedContent? textSelection;
+  late final SelectionChangedCause? selectCause;
 
   onLongPress() {
     Rect? targetRect = getRect(msgKey);
@@ -195,12 +196,12 @@ class MsgTypeWidget extends StatelessWidget {
     required this.isMy,
     required this.msgKey,
   });
-  final SendMsgDto item;
+  final SendMsgModule item;
   final bool isMy;
   final GlobalKey msgKey;
   final GlobalKey textSpanEmojiKey = GlobalKey();
 
-  final Map<String, Widget Function(SendMsgDto, bool, GlobalKey)>
+  final Map<String, Widget Function(SendMsgModule, bool, GlobalKey)>
       msgTypeWidget = {
     MessageType.image: (item, isMy, key) => ImageMsg(
           item: item,
@@ -215,12 +216,19 @@ class MsgTypeWidget extends StatelessWidget {
         LocationMsg(item: item, key: key),
     MessageType.reply: (item, isMy, key) =>
         ReplyMsg(item: item, isMy: isMy, msgKey: key),
-    MessageType.video: (item, isMy, key) =>
-        VideoMsg(item: item, isMy: isMy),
+    MessageType.video: (item, isMy, key) => VideoMsg(item: item, isMy: isMy),
+    MessageType.callPhone: (item, isMy, key) =>
+        CallPhoneMsg(item: item, isMy: isMy),
   };
 
   @override
   Widget build(BuildContext context) {
-    return msgTypeWidget[item.messageType]!.call(item, isMy, msgKey);
+    Widget Function(
+            SendMsgModule p1, bool p2, GlobalKey<State<StatefulWidget>> p3)?
+        fun = msgTypeWidget[item.messageType];
+    if (fun != null) {
+      return fun.call(item, isMy, msgKey);
+    }
+    return const SizedBox();
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mall_community/common/comm_style.dart';
 import 'package:mall_community/pages/chat/controller/chat_controller.dart';
-import 'package:mall_community/pages/chat/dto/message_dto.dart';
+import 'package:mall_community/pages/chat/module/message_module.dart';
 import 'package:mall_community/utils/overlay_manager/overlay_manager.dart';
 import 'package:mall_community/utils/time_util.dart';
 import 'package:mall_community/utils/toast/toast.dart';
@@ -20,7 +20,7 @@ class MsgToolBar extends StatefulWidget {
 
   final bool isMy;
   final UniqueKey toolBarKey;
-  final SendMsgDto item;
+  final SendMsgModule item;
   final Function copyText;
 
   @override
@@ -68,8 +68,9 @@ class _MsgToolBarState extends State<MsgToolBar> {
 
   @override
   void initState() {
-    if(widget.isMy && TimeUtil.timeDiffer(widget.item.time).inMinutes < 3) {
-      list.add({'title': '撤回', "icon": const IconData(0xe60f, fontFamily: 'micon')});
+    if (widget.isMy && TimeUtil.timeDiffer(widget.item.time).inMinutes < 3) {
+      list.add(
+          {'title': '撤回', "icon": const IconData(0xe60f, fontFamily: 'micon')});
     }
     super.initState();
   }
@@ -108,7 +109,11 @@ class _MsgToolBarState extends State<MsgToolBar> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(list[i]['icon'], color: Colors.white, size: 20,),
+            Icon(
+              list[i]['icon'],
+              color: Colors.white,
+              size: 20,
+            ),
             const SizedBox(height: 2),
             Text(
               list[i]['title'],
