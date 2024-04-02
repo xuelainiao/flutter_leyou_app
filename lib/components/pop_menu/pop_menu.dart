@@ -128,7 +128,6 @@ class _CustomPopupState extends State<CustomPopup> {
       // TODO 被动画组件包裹会导致位置偏移 这里根据实际情况自定义
       _left = (left < _margin ? _margin : left) + 20;
     }
-
   }
 
   @override
@@ -158,25 +157,29 @@ class _CustomPopupState extends State<CustomPopup> {
         child: widget.child,
       ),
     );
-    return Stack(
-      children: [
-        Positioned(
-          left: _left,
-          top: _top,
-          bottom: _bottom,
-          right: _right,
-          child: Opacity(
-            opacity: _left != null ? 1 : 0,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: _viewportRect.width,
-                maxHeight: _maxHeight,
+    return SizedBox(
+      height: 1.sh,
+      width: 1.sw,
+      child: Stack(
+        children: [
+          Positioned(
+            left: _left,
+            top: _top,
+            bottom: _bottom,
+            right: _right,
+            child: Opacity(
+              opacity: _left != null ? 1 : 0,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: _viewportRect.width,
+                  maxHeight: _maxHeight,
+                ),
+                child: child,
               ),
-              child: child,
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 

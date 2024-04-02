@@ -8,18 +8,20 @@ import 'package:mall_community/utils/utils.dart';
 
 /// 视频消息
 class VideoMsg extends StatelessWidget {
-  const VideoMsg({super.key, required this.item, required this.isMy});
+  VideoMsg({super.key, required this.item, required this.isMy});
 
   final SendMsgModule item;
   final bool isMy;
+  String? id;
 
   tap(ctx, String url, String cover) {
-    previewVideo(ctx, url: url, cover: cover);
+    previewVideo(ctx, url: url, cover: "$cover?id=$id");
   }
 
   @override
   Widget build(BuildContext context) {
     FileMsgInfo fileMsgInfo = FileMsgInfo(jsonDecode(item.content));
+    id ??= UniqueKey().toString();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       constraints: BoxConstraints(
@@ -34,7 +36,7 @@ class VideoMsg extends StatelessWidget {
           tap(context, fileMsgInfo.content, fileMsgInfo.cover);
         },
         child: Hero(
-            tag: fileMsgInfo.cover,
+            tag: "${fileMsgInfo.cover}?id=$id",
             placeholderBuilder: (context, heroSize, child) {
               return child;
             },

@@ -11,8 +11,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-
-
 init() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 存储
@@ -24,6 +22,6 @@ init() async {
   UserInfo.token = Storage().read('token') ?? '';
   if (AppConfig.privacyStatementHasAgree) {
     // 百度地图
-    await BdLocation().init();
+    BdLocation().init();
   }
 }

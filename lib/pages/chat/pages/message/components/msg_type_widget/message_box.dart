@@ -39,26 +39,28 @@ class MessageBox extends StatelessWidget {
   final GlobalKey msgKey = GlobalKey();
   final GlobalKey textSpanEmojiKey = GlobalKey();
   final ChatController chatController = Get.find();
-  late final Timer? timer;
-  late final SelectedContent? textSelection;
-  late final SelectionChangedCause? selectCause;
+  Timer? timer;
+  SelectedContent? textSelection;
+  SelectionChangedCause? selectCause;
 
   onLongPress() {
     Rect? targetRect = getRect(msgKey);
-    OverlayManager().showOverlay(
-      CustomPopup(
-        targetRect: targetRect!,
-        backgroundColor: routineTextC,
-        child: MsgToolBar(
-          isMy: isMy,
-          item: item,
-          toolBarKey: toolBarKey,
-          copyText: copyText,
+    if (targetRect != null) {
+      OverlayManager().showOverlay(
+        CustomPopup(
+          targetRect: targetRect,
+          backgroundColor: routineTextC,
+          child: MsgToolBar(
+            isMy: isMy,
+            item: item,
+            toolBarKey: toolBarKey,
+            copyText: copyText,
+          ),
         ),
-      ),
-      toolBarKey,
-      isAnimate: false,
-    );
+        toolBarKey,
+        isAnimate: false,
+      );
+    }
   }
 
   // 文本消息选择回调
@@ -216,9 +218,13 @@ class MsgTypeWidget extends StatelessWidget {
         LocationMsg(item: item, key: key),
     MessageType.reply: (item, isMy, key) =>
         ReplyMsg(item: item, isMy: isMy, msgKey: key),
-    MessageType.video: (item, isMy, key) => VideoMsg(item: item, isMy: isMy),
+    MessageType.video: (item, isMy, key) => VideoMsg(
+          item: item,
+          isMy: isMy,
+          key: key,
+        ),
     MessageType.callPhone: (item, isMy, key) =>
-        CallPhoneMsg(item: item, isMy: isMy),
+        CallPhoneMsg(item: item, isMy: isMy)
   };
 
   @override

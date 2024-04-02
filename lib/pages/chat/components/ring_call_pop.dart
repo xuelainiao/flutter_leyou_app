@@ -41,67 +41,75 @@ class RingCallPop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CallVideoUser user = data.fromUser;
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 14,
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: primaryColor,
-              offset: const Offset(0, 10),
-              blurRadius: 40.0,
-              spreadRadius: 0.0,
-            )
-          ]),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          MyAvatar(
-            size: 50,
-            radius: 50,
-            src: user.avatar,
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 14,
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                user.nickNmae,
-                style: tx16.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
+          margin: const EdgeInsets.only(
+            top: 100,
+            left: 20,
+            right: 20,
+          ),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: primaryColor,
+                  offset: const Offset(0, 10),
+                  blurRadius: 40.0,
+                  spreadRadius: 0.0,
+                )
+              ]),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              MyAvatar(
+                size: 50,
+                radius: 50,
+                src: user.avatar,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    user.nickNmae,
+                    style: tx16.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Button(
+                onPressed: reject,
+                circle: true,
+                size: const Size(44, 44),
+                color: HexThemColor(errorColor),
+                icon: const Icon(
+                  IconData(0xe7d3, fontFamily: 'micon'),
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Button(
+                onPressed: answer,
+                circle: true,
+                size: const Size(44, 44),
+                color: HexThemColor(successColor),
+                icon: const Icon(
+                  IconData(0xe676, fontFamily: 'micon'),
+                  size: 20,
+                ),
+              ),
+            ],
           ),
-          Button(
-            onPressed: reject,
-            circle: true,
-            size: const Size(50, 50),
-            color: HexThemColor(errorColor),
-            icon: const Icon(
-              IconData(0xe7d3, fontFamily: 'micon'),
-              size: 30,
-            ),
-          ),
-          const SizedBox(width: 20),
-          Button(
-            onPressed: answer,
-            circle: true,
-            size: const Size(50, 50),
-            color: HexThemColor(successColor),
-            icon: const Icon(
-              IconData(0xe676, fontFamily: 'micon'),
-              size: 26,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

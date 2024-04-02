@@ -53,20 +53,10 @@ class _PopAnimateState extends State<PopAnimate>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height,
-      width: size.width,
-      padding: EdgeInsets.symmetric(
-        vertical: widget.isSafeArea ? MediaQuery.of(context).padding.top : 0,
-      ),
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        alignment: widget.alignment,
-        child: Column(
-          children: [widget.child],
-        ),
-      ),
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      alignment: widget.alignment,
+      child: widget.child,
     );
   }
 }

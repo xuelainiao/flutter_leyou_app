@@ -37,7 +37,7 @@ class AppConfig {
   static bool privacyStatementHasAgree = true;
 
   /// 百度地图 ios key
-  static const String amapIosKey = "VE5RJxtPuSqV9eTtId3sY9WtGxd9pjUV";
+  static const String amapIosKey = "UQk7PGiVY6fMhgQYIz5W5BtK2L2HROmE";
 
   /// 百度地图 android key
   static const String amapAndroidKey = "vpb7aVpQ2gb6trP1gxzpt9DUrgmXzXcv";

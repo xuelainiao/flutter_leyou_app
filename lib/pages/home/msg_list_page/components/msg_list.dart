@@ -56,14 +56,11 @@ class FirendMsgList extends StatelessWidget {
             size: 50.r,
             nums: user['online'] == 1 ? "1" : "",
           ),
-          title: SizedBox(
-            height: 28.h,
-            child: Text(
-              user['userName'],
-              style: tx14.copyWith(
-                color: primaryTextC,
-                fontWeight: FontWeight.bold,
-              ),
+          title: Text(
+            user['userName'],
+            style: tx14.copyWith(
+              color: primaryTextC,
+              fontWeight: FontWeight.bold,
             ),
           ),
           subtitle: Row(

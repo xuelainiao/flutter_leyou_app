@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:audio_session/audio_session.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -26,8 +27,27 @@ class SoundRecording {
   StreamSubscription? recorderSubscription;
   StreamSubscription? playerSubscription;
 
-  init() {
+  init() async {
     recorderModule ??= FlutterSoundRecorder();
+    //设置音频
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions:
+          AVAudioSessionCategoryOptions.allowBluetooth |
+              AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+      avAudioSessionRouteSharingPolicy:
+          AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
+    ));
     // recorderModule?.setLogLevel(LEVEL.INFO);
   }
 
@@ -41,14 +61,15 @@ class SoundRecording {
       bool perStatus = await AppPermission.hasPermission(Permission.microphone);
       if (perStatus) {
         Directory tempDir = await getTemporaryDirectory();
-        String path = '${tempDir.path}/flutter_${ext[Codec.aacADTS.index]}';
+        String path =
+            '${tempDir.path}/flutter_${ext[Platform.isAndroid ? Codec.aacADTS.index : Codec.pcm16WAV.index]}';
         await recorderModule?.openRecorder();
         await recorderModule?.startRecorder(
           toFile: path,
-          codec: Codec.aacADTS,
-          bitRate: 8000,
+          codec: Platform.isAndroid ? Codec.aacADTS : Codec.pcm16WAV,
+          bitRate: 1411200,
+          sampleRate: 44100,
           numChannels: 1,
-          sampleRate: 8000,
         );
         // 设置订阅回调时长
         recorderModule
@@ -141,7 +162,7 @@ class SoundRecording {
       if (path.contains('http')) {
         await playerModule?.startPlayer(
           fromURI: path,
-          codec: Codec.mp3,
+          codec: Platform.isAndroid ? Codec.aacADTS : Codec.pcm16WAV,
           sampleRate: 44000,
           whenFinished: () {
             callback(PlayerStatus.finished);
@@ -155,7 +176,7 @@ class SoundRecording {
           }
           await playerModule?.startPlayer(
               fromURI: path,
-              codec: Codec.aacADTS,
+              codec: Platform.isAndroid ? Codec.aacADTS : Codec.pcm16WAV,
               sampleRate: 44000,
               whenFinished: () {
                 callback(PlayerStatus.finished);

@@ -68,3 +68,14 @@ class FileCacheManager {
     return instance.emptyCache();
   }
 }
+
+/// 文件缓存key
+/// 方便后期根据key维护文件缓存
+class FileCacheKeys {
+  static final List<Map<String, String>> fileKeys = [
+    {"key": "video_file", "title": "视频缓存"}
+  ];
+
+  /// 视频文件key
+  get getVideoKey => "video_file";
+}

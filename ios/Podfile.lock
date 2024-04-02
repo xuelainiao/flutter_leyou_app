@@ -1,4 +1,6 @@
 PODS:
+  - audio_session (0.0.1):
+    - Flutter
   - BaiduMapKit/Base (6.6.0)
   - BaiduMapKit/Map (6.6.0):
     - BaiduMapKit/Base
@@ -59,6 +61,8 @@ PODS:
     - BaiduMapKit/Utils (= 6.6.0)
     - Flutter
     - flutter_baidu_mapapi_base
+  - flutter_blue_plus (0.0.1):
+    - Flutter
   - flutter_bmflocation (3.5.0):
     - BMKLocationKit (~> 2.1.0)
     - Flutter
@@ -66,10 +70,10 @@ PODS:
     - Flutter
   - flutter_localization (0.0.1):
     - Flutter
-  - flutter_sound (9.2.13):
+  - flutter_sound (9.4.6):
     - Flutter
-    - flutter_sound_core (= 9.2.13)
-  - flutter_sound_core (9.2.13)
+    - flutter_sound_core (= 9.4.6)
+  - flutter_sound_core (9.4.6)
   - flutter_webrtc (0.9.36):
     - Flutter
     - WebRTC-SDK (= 114.5735.08)
@@ -83,16 +87,9 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
-  - QCloudCore/Default (6.3.4):
-    - QCloudTrack/Beacon (= 6.3.5)
-  - QCloudCOSXML (6.3.4):
-    - QCloudCOSXML/Default (= 6.3.4)
-  - QCloudCOSXML/Default (6.3.4):
-    - QCloudCore/Default (= 6.3.4)
-  - QCloudTrack/Beacon (6.3.5)
-  - SDWebImage (5.18.10):
-    - SDWebImage/Core (= 5.18.10)
-  - SDWebImage/Core (5.18.10)
+  - SDWebImage (5.19.1):
+    - SDWebImage/Core (= 5.19.1)
+  - SDWebImage/Core (5.19.1)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -100,9 +97,6 @@ PODS:
     - Flutter
     - FlutterMacOS
   - SwiftyGif (5.4.4)
-  - tencentcloud_cos_sdk_plugin (1.1.1):
-    - Flutter
-    - QCloudCOSXML (>= 6.3.4)
   - video_player_avfoundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -114,6 +108,7 @@ PODS:
   - ZLPhotoBrowser/Core (4.2.5)
 
 DEPENDENCIES:
+  - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
@@ -121,6 +116,7 @@ DEPENDENCIES:
   - flutter_baidu_mapapi_map (from `.symlinks/plugins/flutter_baidu_mapapi_map/ios`)
   - flutter_baidu_mapapi_search (from `.symlinks/plugins/flutter_baidu_mapapi_search/ios`)
   - flutter_baidu_mapapi_utils (from `.symlinks/plugins/flutter_baidu_mapapi_utils/ios`)
+  - flutter_blue_plus (from `.symlinks/plugins/flutter_blue_plus/ios`)
   - flutter_bmflocation (from `.symlinks/plugins/flutter_bmflocation/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_localization (from `.symlinks/plugins/flutter_localization/ios`)
@@ -132,7 +128,6 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/darwin`)
-  - tencentcloud_cos_sdk_plugin (from `.symlinks/plugins/tencentcloud_cos_sdk_plugin/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
 
@@ -143,15 +138,14 @@ SPEC REPOS:
     - DKImagePickerController
     - DKPhotoGallery
     - flutter_sound_core
-    - QCloudCore
-    - QCloudCOSXML
-    - QCloudTrack
     - SDWebImage
     - SwiftyGif
     - WebRTC-SDK
     - ZLPhotoBrowser
 
 EXTERNAL SOURCES:
+  audio_session:
+    :path: ".symlinks/plugins/audio_session/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   file_picker:
@@ -166,6 +160,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_baidu_mapapi_search/ios"
   flutter_baidu_mapapi_utils:
     :path: ".symlinks/plugins/flutter_baidu_mapapi_utils/ios"
+  flutter_blue_plus:
+    :path: ".symlinks/plugins/flutter_blue_plus/ios"
   flutter_bmflocation:
     :path: ".symlinks/plugins/flutter_bmflocation/ios"
   flutter_keyboard_visibility:
@@ -188,14 +184,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite:
     :path: ".symlinks/plugins/sqflite/darwin"
-  tencentcloud_cos_sdk_plugin:
-    :path: ".symlinks/plugins/tencentcloud_cos_sdk_plugin/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/darwin"
   wakelock_plus:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
+  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   BaiduMapKit: 155ba6a94b8155826c5ed0f843f18875df2b807b
   BMKLocationKit: a93bc412af3a601f12d243f4fb83f77650103e56
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
@@ -207,29 +202,26 @@ SPEC CHECKSUMS:
   flutter_baidu_mapapi_map: d54b33f6618bc9fcdbc3a76426255230b0d3271e
   flutter_baidu_mapapi_search: 89b48a0c84dbddcffb74c1c68ddf118f76b491ea
   flutter_baidu_mapapi_utils: a3f5dc1bd58c2517a064139a1ea100a5fc1241b1
+  flutter_blue_plus: 4837da7d00cf5d441fdd6635b3a57f936778ea96
   flutter_bmflocation: 2a478a9b70e1a5fd0857a39a47d06090dbc0a63a
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_localization: f43b18844a2b3d2c71fd64f04ffd6b1e64dd54d4
-  flutter_sound: c60effa2a350fb977885f0db2fbc4c1ad5160900
-  flutter_sound_core: 26c10e5832e76aaacfae252d8925232281c486ae
+  flutter_sound: d1ed7b8bac3c4513ac5ef8b90c15f3a6b860291b
+  flutter_sound_core: 46f6f56752a209dcc72be9f09b71c8b626f70d49
   flutter_webrtc: 55df3aaa802114dad390191a46c2c8d535751268
   images_picker: fa9364e3a7d3083c49f865fcfb2b9e7cdc574d3a
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   permission_handler_apple: 036b856153a2b1f61f21030ff725f3e6fece2b78
-  QCloudCore: a5fdf2cc8553bbdc84b6b6e3a8edbcab48734f90
-  QCloudCOSXML: 7bbdb57c28a2d2b65312a16ede903c7c1fc28f99
-  QCloudTrack: a1e25308ead00d58db596b8564c7f197a8a06102
-  SDWebImage: fc8f2d48bbfd72ef39d70e981bd24a3f3be53fec
+  SDWebImage: 40b0b4053e36c660a764958bff99eed16610acbb
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
-  tencentcloud_cos_sdk_plugin: 3f6f226e6ca0bf8060ad4de57c3007d7972d2c5e
   video_player_avfoundation: 02011213dab73ae3687df27ce441fbbcc82b5579
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
   WebRTC-SDK: c24d2a6c9f571f2ed42297cb8ffba9557093142b
   ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a
 
-PODFILE CHECKSUM: db1d6475fab1b7dbbf8f96c4a28f1513bc35f9b2
+PODFILE CHECKSUM: b064e8a4acafa4836d50fc4f47c497d60e652e95
 
 COCOAPODS: 1.15.2

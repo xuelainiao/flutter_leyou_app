@@ -32,7 +32,7 @@ class WaveformsList extends StatelessWidget {
         Container(
           width: 4,
           height: height < 2 ? 4 : height,
-          constraints: const BoxConstraints(maxHeight: 50),
+          constraints: const BoxConstraints(maxHeight: 40),
           margin: const EdgeInsetsDirectional.symmetric(horizontal: 2),
           decoration: BoxDecoration(
             color: Colors.white,

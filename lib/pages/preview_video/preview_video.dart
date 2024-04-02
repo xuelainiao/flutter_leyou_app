@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
@@ -6,6 +8,7 @@ import 'package:mall_community/components/drag_bottom_dismiss/drag_bottom_pop_sh
 import 'dart:math';
 import 'package:mall_community/components/new_work_image_widget/new_work_image_widget.dart';
 import 'package:mall_community/utils/cache_manager/cache_manager.dart';
+import 'package:mall_community/utils/log/log.dart';
 import 'package:video_player/video_player.dart';
 
 /// 视频预览页面
@@ -27,18 +30,23 @@ class _PreviewVideoState extends State<PreviewVideo> {
   init() async {
     FileInfo? fileInfo = await FileCacheManager.getFileFromCache(widget.url);
     if (fileInfo != null) {
-      videoPlayerController = VideoPlayerController.file(fileInfo.file)
+      File file = await fileInfo.file
+          .rename(fileInfo.file.path.replaceAll(".bin", ".mp4"));
+      videoPlayerController = VideoPlayerController.file(file)
         ..initialize().then((value) {
           setChewie();
+        }).catchError((err) {
+          Log.error("视频初始化错误 $err");
         });
     } else {
-      videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.url))
-        ..initialize().then((_) {
-          setChewie();
-          FileCacheManager.downloadFile(widget.url);
-        }).catchError((err) {
-          debugPrint('catchError $err  ${widget.url}');
-        });
+      videoPlayerController =
+          VideoPlayerController.networkUrl(Uri.parse(widget.url))
+            ..initialize().then((_) {
+              setChewie();
+              FileCacheManager.downloadFile(widget.url);
+            }).catchError((err) {
+              debugPrint('catchError $err  ${widget.url}');
+            });
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mall_community/components/tabbar/tabbar.dart';
+import 'package:mall_community/pages/bluetooth/bluetooth_page.dart';
 import 'package:mall_community/pages/home/msg_list_page/msg_list_page.dart';
 import 'package:mall_community/pages/home/user/user.dart';
 
@@ -37,13 +38,13 @@ class _HomeTabblePageState extends State<HomeTabblePage>
       'page': () => UserPage()
     },
     {
-      'name': '我的',
-      'icon': const Icon(FontAwesomeIcons.user),
+      'name': '蓝牙',
+      'icon': const Icon(Icons.bluetooth_connected),
       'activeIcon': Lottie.asset(
         'lib/assets/lottie/home_user.json',
         repeat: false,
       ),
-      'page': () => UserPage()
+      'page': () => const BluetoothPage()
     },
   ];
 

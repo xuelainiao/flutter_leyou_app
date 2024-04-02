@@ -14,7 +14,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.1.2
+version: 1.2.0
 
 environment:
   sdk: ">=3.2.3 <4.0.0"
@@ -47,9 +47,6 @@ dependencies:
   flutter_cache_manager: ^3.3.1
   # socket io
   socket_io_client: ^2.0.3+1
-  # 腾讯云cos上传
-  tencentcloud_cos_sdk_plugin: ^1.1.0
-  tencent_cos_plus: ^1.2.1
   # 国际化本地化
   flutter_localization: ^0.2.0
   # 时间工具
@@ -82,8 +79,6 @@ dependencies:
   get_storage: ^2.1.1
   # 本地sqlite
   sqflite: ^2.3.2
-  # 底部tabbar
-  animated_notch_bottom_bar: ^1.0.1
   # lottie 动画
   lottie: ^2.7.0
   # 消息列表侧滑操作
@@ -91,7 +86,8 @@ dependencies:
   # 多功能缓存图片组件
   extended_image: ^8.2.0
   # 音频录音
-  flutter_sound: ^9.2.13
+  flutter_sound: ^9.4.6
+  audio_session: ^0.1.18
   # 权限判断
   permission_handler: ^11.2.0
   # 文件地址 目前用于录音临时文件地址
@@ -107,7 +103,10 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   # 分帧渲染 针对性能列表优化
   keframe: ^3.0.0
-  logger: ^1.4.0
+  # 日志插件
+  logger: ^2.2.0
+  # 蓝牙插件
+  flutter_blue_plus: ^1.31.17
 
 dev_dependencies:
   flutter_test:
@@ -120,8 +119,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+dependency_overrides:
+  js: 0.7.1
 
 # The following section is specific to Flutter packages.
 flutter:
