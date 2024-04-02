@@ -23,9 +23,11 @@
 
 # 预览图
 
-<img src="./images/README/1712031825084.png" width="200">
-<img src="./images/README/1971712031714_.pic.jpg" width="200" >
-<img src="./images/README/1981712031715_.pic.jpg" width="200" >
-<img src="./images/README/1991712032307_.pic.jpg" width="200" >
-<img src="./images/README/2001712032308_.pic.jpg" width="200" >
-<img src="./images/README/2011712032309_.pic.jpg" width="200" >
+<div style="display:flex;flex-wrap:wrap">
+<img src="./images/README/1712031825084.png" width="200" style="margin:4px">
+<img src="./images/README/1971712031714_.pic.jpg" width="200" style="margin:4px">
+<img src="./images/README/1981712031715_.pic.jpg" width="200" style="margin:4px">
+<img src="./images/README/1991712032307_.pic.jpg" width="200" style="margin:4px">
+<img src="./images/README/2001712032308_.pic.jpg" width="200" style="margin:4px">
+<img src="./images/README/2011712032309_.pic.jpg" width="200" style="margin:4px">
+<div>
