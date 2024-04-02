@@ -1,16 +1,31 @@
-# mall_community
+# 乐悠云社
 
-A new Flutter project.
+云端交友社区，注重用户细节体验，性能逼近原生微信抖音体验，正在开发中，临时开源
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+# 特点技术
 
-A few resources to get you started if this is your first Flutter project:
+1. 解决了flutter 消息列表默认渲染底部和数据少渲染顶部问题（大部分人会用倒叙），不采用倒叙通过偏移计算实现
+2. 解决了查看历史消息，有人发送消息不会产生滚动问题，会默认定位在当前位置
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 待完成模块
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* [ ]  IM
+  * [X]  好友聊天
+  * [ ]  群聊
+* [ ]  社区
+* [ ]  商城
+* [ ]  音视频
+  * [X]  1v1
+* [ ]  登录
+  * [X]  账号密码登录
+  * [ ]  微信登录
+
+# 预览图
+
+<img src="./images/README/1712031825084.png" width="200">
+<img src="./images/README/1971712031714_.pic.jpg" width="200" >
+<img src="./images/README/1981712031715_.pic.jpg" width="200" >
+<img src="./images/README/1991712032307_.pic.jpg" width="200" >
+<img src="./images/README/2001712032308_.pic.jpg" width="200" >
+<img src="./images/README/2011712032309_.pic.jpg" width="200" >
